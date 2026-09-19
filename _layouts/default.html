@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title | default: site.title }}</title>
+  <meta name="description" content="{{ site.description }}">
+  <style>
+    :root { color-scheme: light dark; }
+    body { font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+           max-width: 42rem; margin: 0 auto; padding: 2rem 1rem 4rem; }
+    a { color: #0a66c2; }
+    @media (prefers-color-scheme: dark) { a { color: #6db3f2; } }
+  </style>
+</head>
+<body>
+{{ content }}
+</body>
+</html>

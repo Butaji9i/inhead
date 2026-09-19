@@ -1,3 +1,7 @@
 title: Inhead
 description: Privacy policy for the Inhead headache diary
-theme: jekyll-theme-minimal
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
