@@ -80,7 +80,7 @@ h2 { font-size: 1.375rem; margin: 2.5rem 0 0.75rem; }
   font-weight: 600;
   text-decoration: none;
 }
-.button[aria-disabled='true'] {
+.button--soon {
   background: transparent;
   color: var(--text);
   border: 2px dashed var(--border);
