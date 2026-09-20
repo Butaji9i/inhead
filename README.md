@@ -1,8 +1,14 @@
-# inhead-privacy
+# Inhead website
 
-The published privacy policy for the Inhead headache diary, served by GitHub
-Pages so App Store Connect has a URL to point at.
+Source of https://inhead.app: a landing page for the Inhead headache diary and
+its privacy policy.
 
-The source of truth is `docs/privacy-policy.md` in the app repository, which
-also records what backs each claim. This repository holds only the public text;
-edit it there first, then copy the policy section here.
+- `src/pages/privacy.md` is the source of truth for the privacy policy, served
+  at `/privacy/`. Change it through a pull request.
+- `src/config.ts` holds the App Store URL. While it is `null`, the page shows a
+  "Coming soon" label.
+- Built with Astro as static HTML and deployed to GitHub Pages by GitHub Actions.
+- `public/CNAME` keeps the custom domain in every build.
+
+Develop: `npm ci`, then `npm run dev`. Before opening a pull request run
+`npm test`, `npm run build` and `npm run check`.

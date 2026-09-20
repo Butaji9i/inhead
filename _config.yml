@@ -1,7 +1,0 @@
-title: Inhead
-description: Privacy policy for the Inhead headache diary
-defaults:
-  - scope:
-      path: ""
-    values:
-      layout: default
