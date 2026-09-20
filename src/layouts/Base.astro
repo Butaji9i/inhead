@@ -1,0 +1,43 @@
+---
+import '../styles/global.css';
+import { SITE_NAME, CONTACT_EMAIL } from '../config';
+
+const fm = Astro.props.frontmatter ?? {};
+const title: string = fm.title ?? Astro.props.title ?? SITE_NAME;
+const description: string = fm.description ?? Astro.props.description ?? '';
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={canonical} />
+    <meta name="color-scheme" content="light dark" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site">
+      <div class="wrap">
+        <a class="wordmark" href="/">{SITE_NAME}</a>
+        <nav aria-label="Main"><a href="/privacy/">Privacy</a></nav>
+      </div>
+    </header>
+    <main id="main" class="wrap"><slot /></main>
+    <footer class="site">
+      <div class="wrap">
+        <p>Questions? <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> · <a href="/privacy/">Privacy policy</a></p>
+        <p>Inhead is a diary, not medical advice.</p>
+        <p>© {SITE_NAME}</p>
+      </div>
+    </footer>
+  </body>
+</html>
