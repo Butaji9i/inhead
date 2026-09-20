@@ -39,7 +39,7 @@ body {
   padding-inline: 1rem;
 }
 
-:is(main) :is(p, ul, ol, h1, h2, h3, blockquote) { max-width: var(--measure); }
+main :is(p, ul, ol, h1, h2, h3, blockquote) { max-width: var(--measure); }
 main:focus { outline: none; }
 
 a { color: var(--accent); text-underline-offset: 0.2em; }

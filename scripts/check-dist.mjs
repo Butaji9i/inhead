@@ -3,7 +3,7 @@ import { join, relative, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ALLOWED_EMAIL = 'support@inhead.app';
-const TEXT_EXT = new Set(['.html', '.xml', '.txt', '.json', '.webmanifest', '.svg']);
+const TEXT_EXT = new Set(['.html', '.xml', '.txt', '.json', '.webmanifest', '.svg', '.css', '.js', '.mjs']);
 const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z][A-Za-z0-9.-]*\.[A-Za-z]{2,}/g;
 
 const isText = (path) => TEXT_EXT.has(extname(path).toLowerCase()) || path === 'CNAME';
