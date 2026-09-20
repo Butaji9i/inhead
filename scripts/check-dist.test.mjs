@@ -90,3 +90,16 @@ test('@media (prefers-color-scheme: dark) produces no violations', () => {
     [],
   );
 });
+
+test('email inside a .css file is flagged', () => {
+  assert.equal(findViolations([page('a{content:"a@b.co"}', '_astro/x.css')], []).length, 1);
+});
+
+test('minified dark-mode css and @import are not flagged', () => {
+  const css = '@import url(x.css);a{color:red}@media(prefers-color-scheme:dark){:root{--x:1}}';
+  assert.deepEqual(findViolations([page(css, '_astro/x.css')], []), []);
+});
+
+test('github.com in a .js file is flagged', () => {
+  assert.equal(findViolations([page('fetch("https://github.com/x")', '_astro/x.js')], []).length, 1);
+});
