@@ -52,3 +52,41 @@ test('missing CNAME is reported', () => {
 test('correct CNAME with trailing newline passes', () => {
   assert.deepEqual(checkRequired(['privacy/index.html'], 'inhead.app\n'), []);
 });
+
+test('retina asset names like logo@2x.png do not trigger email violations', () => {
+  const v = findViolations([page('<img src="/logo@2x.png" srcset="/hero@2x.jpg 2x, /icon@3x.webp 3x">')], []);
+  assert.deepEqual(v, []);
+});
+
+test('support@inhead.app (allowed) still passes', () => {
+  assert.deepEqual(
+    findViolations([page('Contact: support@inhead.app')], []),
+    [],
+  );
+});
+
+test('Support@Inhead.App (case-insensitive) still passes', () => {
+  assert.deepEqual(
+    findViolations([page('Contact: Support@Inhead.App')], []),
+    [],
+  );
+});
+
+test('someone@example.com is still rejected', () => {
+  const v = findViolations([page('Email: someone@example.com')], []);
+  assert.equal(v.length, 1);
+  assert.match(v[0], /someone@example\.com/);
+});
+
+test('support@inhead.app.evil.com (lookalike) is rejected', () => {
+  const v = findViolations([page('support@inhead.app.evil.com')], []);
+  assert.equal(v.length, 1);
+  assert.match(v[0], /support@inhead\.app\.evil\.com/);
+});
+
+test('@media (prefers-color-scheme: dark) produces no violations', () => {
+  assert.deepEqual(
+    findViolations([page('@media (prefers-color-scheme: dark) { }')], []),
+    [],
+  );
+});

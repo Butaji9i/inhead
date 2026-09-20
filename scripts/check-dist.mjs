@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const ALLOWED_EMAIL = 'support@inhead.app';
 const TEXT_EXT = new Set(['.html', '.xml', '.txt', '.json', '.webmanifest', '.svg']);
-const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
+const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z][A-Za-z0-9.-]*\.[A-Za-z]{2,}/g;
 
 const isText = (path) => TEXT_EXT.has(extname(path).toLowerCase()) || path === 'CNAME';
 
@@ -13,8 +13,12 @@ export function findViolations(files, extraForbidden = []) {
   const out = [];
   for (const { path, content } of files) {
     if (!isText(path)) continue;
+    const seenEmails = new Set();
     for (const m of content.match(EMAIL) ?? []) {
-      if (m.toLowerCase() !== ALLOWED_EMAIL) out.push(`${path}: email address ${m}`);
+      if (m.toLowerCase() !== ALLOWED_EMAIL && !seenEmails.has(m.toLowerCase())) {
+        out.push(`${path}: email address ${m}`);
+        seenEmails.add(m.toLowerCase());
+      }
     }
     const lower = content.toLowerCase();
     if (lower.includes('github.com')) out.push(`${path}: contains github.com`);
