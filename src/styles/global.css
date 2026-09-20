@@ -39,7 +39,8 @@ body {
   padding-inline: 1rem;
 }
 
-.prose { max-width: var(--measure); }
+:is(main) :is(p, ul, ol, h1, h2, h3, blockquote) { max-width: var(--measure); }
+main:focus { outline: none; }
 
 a { color: var(--accent); text-underline-offset: 0.2em; }
 a:focus-visible, .button:focus-visible {
