@@ -9,5 +9,5 @@ const d = dark ? await getImage({ src: dark, width, format: 'webp' }) : undefine
 ---
 <picture>
   {d && <source media="(prefers-color-scheme: dark)" srcset={d.src} type="image/webp" />}
-  <img src={l.src} width={l.attributes.width} height={l.attributes.height} alt={alt} loading={loading} decoding="async" />
+  <img src={l.src} width={l.attributes.width} height={l.attributes.height} alt={alt} loading={loading} decoding="async" draggable="false" />
 </picture>
