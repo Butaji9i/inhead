@@ -38,6 +38,59 @@ export function checkRequired(paths, cname) {
   return out;
 }
 
+const isHtml = (path) => path.toLowerCase().endsWith('.html');
+
+function hasKey(node, keys) {
+  if (Array.isArray(node)) return node.some((n) => hasKey(n, keys));
+  if (node && typeof node === 'object') {
+    return Object.keys(node).some((k) => keys.includes(k) || hasKey(node[k], keys));
+  }
+  return false;
+}
+
+export function checkJsonLd(files) {
+  const out = [];
+  const re = /<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;
+  for (const { path, content } of files) {
+    if (!isHtml(path)) continue;
+    for (const m of content.matchAll(re)) {
+      let data;
+      try { data = JSON.parse(m[1]); } catch { out.push(`${path}: JSON-LD does not parse`); continue; }
+      if (hasKey(data, ['aggregateRating', 'review'])) out.push(`${path}: JSON-LD contains aggregateRating or review`);
+    }
+  }
+  return out;
+}
+
+export function checkImgAlt(files) {
+  const out = [];
+  for (const { path, content } of files) {
+    if (!isHtml(path)) continue;
+    for (const m of content.matchAll(/<img\b[^>]*>/gi)) {
+      const alt = m[0].match(/\balt=(?:"([^"]*)"|'([^']*)')/i);
+      if (!alt) out.push(`${path}: <img> without alt: ${m[0].slice(0, 80)}`);
+      else if (/placeholder/i.test(alt[1] ?? alt[2] ?? '')) out.push(`${path}: alt text says placeholder`);
+    }
+  }
+  return out;
+}
+
+export function checkStoreGating(files, storeIsNull) {
+  if (!storeIsNull) return [];
+  const out = [];
+  for (const { path, content } of files) {
+    if (!isHtml(path)) continue;
+    if (content.includes('MobileApplication')) out.push(`${path}: MobileApplication markup while STORE_URL is null`);
+    if (content.includes('apple-itunes-app')) out.push(`${path}: apple-itunes-app meta while STORE_URL is null`);
+  }
+  return out;
+}
+
+const REQUIRED_ASSETS = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'icon-512.png'];
+export function checkRequiredAssets(paths) {
+  return REQUIRED_ASSETS.filter((p) => !paths.includes(p)).map((p) => `missing ${p}`);
+}
+
 function walk(dir) {
   return readdirSync(dir).flatMap((name) => {
     const p = join(dir, name);

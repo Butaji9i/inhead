@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { findViolations, checkRequired } from './check-dist.mjs';
+import { findViolations, checkRequired, checkJsonLd, checkImgAlt, checkStoreGating, checkRequiredAssets } from './check-dist.mjs';
 
 const page = (content, path = 'index.html') => ({ path, content });
 
@@ -102,4 +102,48 @@ test('minified dark-mode css and @import are not flagged', () => {
 
 test('github.com in a .js file is flagged', () => {
   assert.equal(findViolations([page('fetch("https://github.com/x")', '_astro/x.js')], []).length, 1);
+});
+
+const ld = (obj) => `<script type="application/ld+json">${typeof obj === 'string' ? obj : JSON.stringify(obj)}</script>`;
+
+test('valid json-ld passes', () => {
+  assert.deepEqual(checkJsonLd([page(ld({ '@context': 'https://schema.org', '@type': 'WebSite' }))]), []);
+});
+test('json-ld that does not parse is reported', () => {
+  assert.equal(checkJsonLd([page(ld('{ not json'))]).length, 1);
+});
+test('aggregateRating anywhere in json-ld is reported', () => {
+  const bad = ld({ '@graph': [{ '@type': 'MobileApplication', aggregateRating: { ratingValue: 5 } }] });
+  assert.equal(checkJsonLd([page(bad)]).length, 1);
+});
+test('review anywhere in json-ld is reported', () => {
+  assert.equal(checkJsonLd([page(ld({ '@graph': [{ review: [] }] }))]).length, 1);
+});
+test('json-ld in non-html files is ignored', () => {
+  assert.deepEqual(checkJsonLd([page(ld('{ not json'), 'notes.txt')]), []);
+});
+
+test('img with alt passes, including empty alt', () => {
+  assert.deepEqual(checkImgAlt([page('<img src="a.webp" alt="A month view"><img src="b.svg" alt="">')]), []);
+});
+test('img without alt is reported', () => {
+  assert.equal(checkImgAlt([page('<img src="a.webp">')]).length, 1);
+});
+test('img alt that says placeholder is reported', () => {
+  assert.equal(checkImgAlt([page('<img src="a.webp" alt="Placeholder for a screenshot">')]).length, 1);
+});
+
+test('store markup is reported while STORE_URL is null', () => {
+  assert.equal(checkStoreGating([page(ld({ '@type': 'MobileApplication' }))], true).length, 1);
+  assert.equal(checkStoreGating([page('<meta name="apple-itunes-app" content="app-id=1">')], true).length, 1);
+});
+test('store markup is allowed once STORE_URL is set', () => {
+  assert.deepEqual(checkStoreGating([page(ld({ '@type': 'MobileApplication' }))], false), []);
+});
+
+test('missing required assets are each reported', () => {
+  const all = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'icon-512.png'];
+  assert.deepEqual(checkRequiredAssets(all), []);
+  assert.equal(checkRequiredAssets(all.filter((p) => p !== 'og.png')).length, 1);
+  assert.equal(checkRequiredAssets([]).length, 6);
 });
