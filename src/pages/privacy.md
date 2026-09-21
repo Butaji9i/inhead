@@ -1,5 +1,7 @@
 ---
+layout: ../layouts/Doc.astro
 title: Privacy Policy — Inhead
+description: How Inhead handles your data. It keeps your headache diary on your own devices and in your own iCloud.
 ---
 
 # Privacy Policy — Inhead

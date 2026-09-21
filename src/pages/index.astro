@@ -1,0 +1,60 @@
+---
+import Base from '../layouts/Base.astro';
+import DeviceGroup from '../components/DeviceGroup.astro';
+import StoreLabel from '../components/StoreLabel.astro';
+import FeatureRow from '../components/FeatureRow.astro';
+import PrivacyBand from '../components/PrivacyBand.astro';
+import Shot from '../components/Shot.astro';
+import { hero, rows, cta } from '../data/copy.mjs';
+import allLight from '../assets/screens/iphone-all-light.webp';
+import allDark from '../assets/screens/iphone-all-dark.webp';
+import weekLight from '../assets/screens/iphone-week-light.webp';
+import weekDark from '../assets/screens/iphone-week-dark.webp';
+import doctorLight from '../assets/screens/iphone-data-doctor-light.webp';
+import doctorDark from '../assets/screens/iphone-data-doctor-dark.webp';
+import '../styles/landing.css';
+
+const [record, see, share] = rows;
+---
+<Base
+  title="Inhead — your headache diary, kept in order"
+  description="Inhead is a headache diary for iPhone and iPad. Record what happened, see what your own records add up to, and take it to your doctor. No account, no server of ours."
+>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero-grid">
+      <div>
+        <h1 id="hero-title">{hero.headline} <span class="accent">{hero.accent}</span></h1>
+        <p class="lede">{hero.lede}</p>
+        <StoreLabel />
+        <p class="note">{hero.note}</p>
+      </div>
+      <DeviceGroup />
+    </div>
+  </section>
+  <div class="wrap rows">
+    <FeatureRow {...record}>
+      <div class="crop crop-record"><Shot light={allLight} dark={allDark} width={660}
+        alt="Inhead's Timeline screen: a week strip, an Ongoing section with Menstruation and Poor Sleep, and pain entries of 3/10, 8/10 and 4/10 at 09:00, 12:00 and 15:00" /></div>
+    </FeatureRow>
+    <FeatureRow {...see} flip>
+      <div class="crop crop-see"><Shot light={weekLight} dark={weekDark} width={660}
+        alt="Inhead's Episodes screen: a strip of days with headache days drawn as colour blobs, and below it an episode card with its pain curve" /></div>
+    </FeatureRow>
+    <FeatureRow {...share}>
+      <div class="crop crop-share"><Shot light={doctorLight} dark={doctorDark} width={660}
+        alt="Inhead's Data screen: a For your doctor card above a Your year grid of small squares, darker red for higher pain" /></div>
+    </FeatureRow>
+  </div>
+
+  <PrivacyBand />
+
+  <section class="cta" aria-labelledby="cta-title">
+    <div class="wrap">
+      <div class="panel">
+        <h2 id="cta-title">{cta.title}</h2>
+        <p>{cta.text}</p>
+        <StoreLabel />
+      </div>
+    </div>
+  </section>
+</Base>

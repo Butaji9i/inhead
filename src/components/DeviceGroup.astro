@@ -1,0 +1,23 @@
+---
+import Shot from './Shot.astro';
+import phoneLight from '../assets/screens/iphone-month-light.webp';
+import phoneDark from '../assets/screens/iphone-month-dark.webp';
+
+const ipad = import.meta.glob('../assets/screens/ipad-hero-*.webp', { eager: true, import: 'default' }) as Record<string, any>;
+const ipadLight = ipad['../assets/screens/ipad-hero-light.webp'];
+const ipadDark = ipad['../assets/screens/ipad-hero-dark.webp'];
+---
+<div class="stage" role="group" aria-label="Screens from the Inhead app">
+  <div class="rig">
+    {ipadLight && (
+      <div class="dev ipad">
+        <Shot light={ipadLight} dark={ipadDark} width={900} loading="lazy"
+          alt="Inhead on iPad: an episode's detail, with its pain curve, the changes in pain through the day, and the pattern you named for it" />
+      </div>
+    )}
+    <div class="dev iphone">
+      <Shot light={phoneLight} dark={phoneDark} width={600} loading="eager"
+        alt="Inhead on iPhone: the month view, with headache days drawn as soft colour blobs and the day's episodes listed below" />
+    </div>
+  </div>
+</div>

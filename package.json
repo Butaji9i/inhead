@@ -1,0 +1,25 @@
+{
+  "name": "inhead-astro",
+  "version": "1.0.0",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview --port 4321",
+    "test": "node --test \"scripts/*.test.mjs\"",
+    "check": "node scripts/check-dist.mjs",
+    "a11y": "node scripts/a11y.mjs"
+  },
+  "type": "module",
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.3.3"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "playwright": "^1.63.0"
+  },
+  "private": true
+}
