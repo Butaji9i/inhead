@@ -21,7 +21,7 @@ export const rows = [
     key: 'see',
     eyebrow: '2 · See',
     title: 'See what it adds up to.',
-    lead: 'A month at a glance: headache days, medication days, and the days you recorded nothing.',
+    lead: 'Your days at a glance: headache days, medication days, and the days you recorded nothing.',
     points: [
       'Which ICHD-3 criteria your own records meet, with the criteria written out so you can see why',
       'Acute medication days per month, counted by ICHD-3’s definition',
