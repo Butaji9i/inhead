@@ -1,0 +1,61 @@
+/* ---------- hero ---------- */
+.hero { position: relative; overflow: hidden; padding-bottom: 3rem; }
+.hero::before {
+  content: ''; position: absolute; right: -160px; top: -120px; width: 820px; height: 700px;
+  background: radial-gradient(closest-side, var(--glow), transparent 70%); pointer-events: none;
+}
+.hero-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 1.5rem; align-items: center; min-height: 640px; position: relative; }
+.hero h1 { font-size: clamp(2.5rem, 5.6vw, 3.75rem); line-height: 1.04; letter-spacing: -0.03em; margin: 0 0 1.1rem; font-weight: 750; }
+.hero h1 .accent { color: var(--link); display: block; }
+.hero .lede { font-size: 1.25rem; color: var(--muted); margin: 0 0 1.6rem; max-width: 26em; }
+.hero .note { font-size: 0.875rem; color: var(--muted); margin: 0.9rem 0 0; }
+
+.store-btn, .store-soon {
+  display: inline-block; padding: 0.95rem 1.75rem; border-radius: 14px; font-weight: 600; text-decoration: none;
+}
+.store-btn { background: var(--btn-bg); color: var(--btn-text); }
+.store-soon { border: 2px dashed var(--line); color: var(--text); }
+
+/* ---------- 3D device group ---------- */
+.stage { position: relative; height: 640px; perspective: 1500px; perspective-origin: 30% 40%; }
+.stage:not(:has(.ipad)) { display: grid; place-items: center; }
+.rig {
+  position: absolute; inset: 0; transform-style: preserve-3d;
+  transform: rotateX(9deg) rotateY(-24deg) rotateZ(1.5deg) translateX(20px);
+}
+.dev { position: absolute; background: #15171a; overflow: hidden; transform-style: preserve-3d; border: 1px solid #3a3d41; }
+.dev picture { display: block; overflow: hidden; }
+.dev img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.dev::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(115deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,0) 32%, rgba(255,255,255,0) 68%, rgba(255,255,255,.07) 100%);
+}
+.ipad {
+  left: 20px; top: 20px; width: 430px; height: 573px; border-radius: 38px; padding: 13px; transform: translateZ(-30px);
+  box-shadow: 1px 0 #2b2e32, 2px 0 #292c30, 3px 0 #272a2e, 4px 0 #25282c, 5px 0 #232629, 6px 0 #212427,
+    7px 0 #1f2225, 8px 0 #1d2023, 9px 0 #1b1e21, 10px 0 #191c1f, 12px 26px 40px -4px rgba(0,0,0,.45);
+}
+.ipad picture { border-radius: 26px; height: 100%; }
+.iphone {
+  left: 300px; top: 140px; width: 230px; height: 500px; border-radius: 44px; padding: 10px; transform: translateZ(90px);
+  box-shadow: 1px 0 #33363a, 2px 0 #303336, 3px 0 #2d3033, 4px 0 #2a2d30, 5px 0 #272a2d, 6px 0 #24272a,
+    7px 0 #212427, 10px 34px 46px -6px rgba(0,0,0,.55);
+}
+.iphone picture { border-radius: 35px; height: 100%; }
+.stage:not(:has(.ipad)) .iphone { position: relative; left: auto; top: auto; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .rig { animation: sway 9s ease-in-out infinite alternate; }
+  @keyframes sway {
+    to { transform: rotateX(7deg) rotateY(-18deg) rotateZ(1deg) translateX(20px); }
+  }
+}
+
+@media (max-width: 820px) {
+  .hero-grid { grid-template-columns: 1fr; min-height: 0; padding-bottom: 2.5rem; }
+  .stage { height: auto; perspective: none; display: grid; place-items: center; padding-block: 1rem; }
+  .rig { position: static; transform: none; animation: none; }
+  .dev { position: relative; left: auto; top: auto; transform: none; }
+  .ipad { display: none; }
+  .iphone { width: 250px; height: 500px; }
+}

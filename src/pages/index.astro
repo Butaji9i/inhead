@@ -1,44 +1,23 @@
 ---
 import Base from '../layouts/Base.astro';
-import { STORE_URL } from '../config';
-
-const points = [
-  'Log a headache in a few taps.',
-  'Add what you were doing and how it felt.',
-  'Look back over past entries whenever you like.',
-  'Your diary stays on your device and in your own iCloud, with no Inhead account.',
-];
-const shots = [
-  { src: '/screenshots/placeholder-1.svg', alt: 'Placeholder for a screenshot of logging an entry' },
-  { src: '/screenshots/placeholder-2.svg', alt: 'Placeholder for a screenshot of the diary' },
-  { src: '/screenshots/placeholder-3.svg', alt: 'Placeholder for a screenshot of past entries' },
-];
+import DeviceGroup from '../components/DeviceGroup.astro';
+import StoreLabel from '../components/StoreLabel.astro';
+import { hero } from '../data/copy.mjs';
+import '../styles/landing.css';
 ---
 <Base
-  title="Inhead — a quiet diary for your headaches"
-  description="Inhead is an iPhone app for keeping a simple headache diary. Your entries stay on your device and in your own iCloud."
+  title="Inhead — your headache diary, kept in order"
+  description="Inhead is a headache diary for iPhone and iPad. Record what happened, see what your own records add up to, and take it to your doctor. No account, no server of ours."
 >
-  <div class="wrap">
-  <section aria-labelledby="hero">
-    <h1 id="hero">Inhead</h1>
-    <p class="lede">A quiet diary for your headaches.</p>
-    {STORE_URL
-      ? <a class="button" href={STORE_URL}>Download on the App Store</a>
-      : <span class="button button--soon">Coming soon to the App Store</span>}
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero-grid">
+      <div>
+        <h1 id="hero-title">{hero.headline} <span class="accent">{hero.accent}</span></h1>
+        <p class="lede">{hero.lede}</p>
+        <StoreLabel />
+        <p class="note">{hero.note}</p>
+      </div>
+      <DeviceGroup />
+    </div>
   </section>
-
-  <section aria-labelledby="what">
-    <h2 id="what">What it does</h2>
-    <ul class="points">
-      {points.map((p) => <li>{p}</li>)}
-    </ul>
-  </section>
-
-  <section aria-labelledby="shots">
-    <h2 id="shots">A look inside</h2>
-    <ul class="shots">
-      {shots.map((s) => <li><img src={s.src} alt={s.alt} width="390" height="844" loading="lazy" /></li>)}
-    </ul>
-  </section>
-  </div>
 </Base>
