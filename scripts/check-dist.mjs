@@ -50,12 +50,24 @@ function hasKey(node, keys) {
 
 export function checkJsonLd(files) {
   const out = [];
-  const re = /<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;
+  const scriptTagRe = /<script\b(?:[^>"']|"[^"]*"|'[^']*')*>([\s\S]*?)<\/script>/gi;
+  const attrRe = /([^\s"'<>\/=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))?/g;
   for (const { path, content } of files) {
     if (!isHtml(path)) continue;
-    for (const m of content.matchAll(re)) {
+    for (const scriptMatch of content.matchAll(scriptTagRe)) {
+      const openTag = scriptMatch[0].slice(0, scriptMatch[0].indexOf('>'));
+      let isJsonLd = false;
+      for (const attrMatch of openTag.matchAll(attrRe)) {
+        const name = attrMatch[1].toLowerCase();
+        const value = (attrMatch[2] ?? attrMatch[3] ?? attrMatch[4] ?? '').toLowerCase();
+        if (name === 'type' && value === 'application/ld+json') {
+          isJsonLd = true;
+          break;
+        }
+      }
+      if (!isJsonLd) continue;
       let data;
-      try { data = JSON.parse(m[1]); } catch { out.push(`${path}: JSON-LD does not parse`); continue; }
+      try { data = JSON.parse(scriptMatch[1]); } catch { out.push(`${path}: JSON-LD does not parse`); continue; }
       if (hasKey(data, ['aggregateRating', 'review'])) out.push(`${path}: JSON-LD contains aggregateRating or review`);
     }
   }
@@ -64,12 +76,25 @@ export function checkJsonLd(files) {
 
 export function checkImgAlt(files) {
   const out = [];
+  const imgRe = /<img\b(?:[^>"']|"[^"]*"|'[^']*')*>/gi;
+  const attrRe = /([^\s"'<>\/=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))?/g;
   for (const { path, content } of files) {
     if (!isHtml(path)) continue;
-    for (const m of content.matchAll(/<img\b[^>]*>/gi)) {
-      const alt = m[0].match(/\balt=(?:"([^"]*)"|'([^']*)')/i);
-      if (!alt) out.push(`${path}: <img> without alt: ${m[0].slice(0, 80)}`);
-      else if (/placeholder/i.test(alt[1] ?? alt[2] ?? '')) out.push(`${path}: alt text says placeholder`);
+    for (const imgMatch of content.matchAll(imgRe)) {
+      const imgTag = imgMatch[0];
+      const tagContent = imgTag.slice(4, imgTag.length - 1);
+      let hasAlt = false;
+      let altValue = '';
+      for (const attrMatch of tagContent.matchAll(attrRe)) {
+        const name = attrMatch[1].toLowerCase();
+        if (name === 'alt') {
+          hasAlt = true;
+          altValue = attrMatch[2] ?? attrMatch[3] ?? attrMatch[4] ?? '';
+          break;
+        }
+      }
+      if (!hasAlt) out.push(`${path}: <img> without alt: ${imgTag.slice(0, 80)}`);
+      else if (/placeholder/i.test(altValue)) out.push(`${path}: alt text says placeholder`);
     }
   }
   return out;
@@ -80,15 +105,21 @@ export function checkStoreGating(files, storeIsNull) {
   const out = [];
   for (const { path, content } of files) {
     if (!isHtml(path)) continue;
-    if (content.includes('MobileApplication')) out.push(`${path}: MobileApplication markup while STORE_URL is null`);
-    if (content.includes('apple-itunes-app')) out.push(`${path}: apple-itunes-app meta while STORE_URL is null`);
+    const lower = content.toLowerCase();
+    if (lower.includes('mobileapplication')) out.push(`${path}: MobileApplication markup while STORE_URL is null`);
+    if (lower.includes('apple-itunes-app')) out.push(`${path}: apple-itunes-app meta while STORE_URL is null`);
   }
   return out;
 }
 
 const REQUIRED_ASSETS = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'icon-512.png'];
 export function checkRequiredAssets(paths) {
-  return REQUIRED_ASSETS.filter((p) => !paths.includes(p)).map((p) => `missing ${p}`);
+  const normalized = paths.map((p) => {
+    let normalized = p.replace(/\\/g, '/');
+    if (normalized.startsWith('./')) normalized = normalized.slice(2);
+    return normalized;
+  });
+  return REQUIRED_ASSETS.filter((p) => !normalized.includes(p)).map((p) => `missing ${p}`);
 }
 
 function walk(dir) {

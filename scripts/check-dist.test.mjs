@@ -147,3 +147,46 @@ test('missing required assets are each reported', () => {
   assert.equal(checkRequiredAssets(all.filter((p) => p !== 'og.png')).length, 1);
   assert.equal(checkRequiredAssets([]).length, 6);
 });
+
+// Fix round 1 regression tests
+test('img with data-alt but no alt is flagged', () => {
+  assert.equal(checkImgAlt([page('<img src="a.webp" data-alt="x">')]).length, 1);
+});
+test('img with alt inside title attribute but no alt is flagged', () => {
+  assert.equal(checkImgAlt([page('<img src="a.webp" title=\'x alt="y"\'>')]).length, 1);
+});
+test('img alt with spaces around equals passes', () => {
+  assert.deepEqual(checkImgAlt([page('<img src="a.webp" alt = "x">')]), []);
+});
+test('img with unquoted alt attribute passes', () => {
+  assert.deepEqual(checkImgAlt([page('<img src="a.webp" alt=description>')]), []);
+});
+test('img with > in another attribute and alt passes', () => {
+  assert.deepEqual(checkImgAlt([page('<img title="a>b" alt="x">')]), []);
+});
+test('img with uppercase ALT passes', () => {
+  assert.deepEqual(checkImgAlt([page('<img src="a.webp" ALT="x">')]), []);
+});
+test('img with alt but no value passes', () => {
+  assert.deepEqual(checkImgAlt([page('<img src="a.webp" alt>')]), []);
+});
+
+test('unquoted-type json-ld with review is flagged', () => {
+  assert.equal(checkJsonLd([page('<script type=application/ld+json>{"review":1}</script>')]).length, 1);
+});
+
+test('mobileapplication lowercase while STORE_URL is null is flagged', () => {
+  assert.equal(checkStoreGating([page('{"@type":"mobileapplication"}')], true).length, 1);
+});
+test('apple-itunes-app lowercase while STORE_URL is null is flagged', () => {
+  assert.equal(checkStoreGating([page('<meta name="apple-itunes-app" content="1">')], true).length, 1);
+});
+
+test('checkRequiredAssets accepts ./og.png', () => {
+  const all = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', './og.png', 'icon-512.png'];
+  assert.deepEqual(checkRequiredAssets(all), []);
+});
+test('checkRequiredAssets accepts backslash paths', () => {
+  const all = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', '.\\og.png', 'icon-512.png'];
+  assert.deepEqual(checkRequiredAssets(all), []);
+});
