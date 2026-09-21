@@ -138,7 +138,16 @@ function main() {
   }));
   const cname = paths.includes('CNAME') ? readFileSync(join(dist, 'CNAME'), 'utf8') : null;
   const extras = (process.env.FORBIDDEN_STRINGS ?? '').split(',');
-  const problems = [...checkRequired(paths, cname), ...findViolations(files, extras)];
+  const configText = (() => { try { return readFileSync('src/config.ts', 'utf8'); } catch { return ''; } })();
+  const storeIsNull = /STORE_URL\s*:\s*string\s*\|\s*null\s*=\s*null/.test(configText);
+  const problems = [
+    ...checkRequired(paths, cname),
+    ...checkRequiredAssets(paths),
+    ...findViolations(files, extras),
+    ...checkJsonLd(files),
+    ...checkImgAlt(files),
+    ...checkStoreGating(files, storeIsNull),
+  ];
   if (problems.length) {
     console.error(problems.join('\n'));
     process.exit(1);

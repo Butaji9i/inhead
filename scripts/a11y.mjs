@@ -4,12 +4,13 @@ import AxeBuilder from '@axe-core/playwright';
 const BASE = process.env.A11Y_BASE ?? 'http://localhost:4321';
 const PATHS = ['/', '/privacy/'];
 const SCHEMES = ['light', 'dark'];
+const WIDTHS = [400, 1200];
 
 const browser = await chromium.launch();
 let failed = false;
 try {
-  for (const colorScheme of SCHEMES) {
-    const context = await browser.newContext({ colorScheme, viewport: { width: 400, height: 900 } });
+  for (const [colorScheme, width] of SCHEMES.flatMap((s) => WIDTHS.map((w) => [s, w]))) {
+    const context = await browser.newContext({ colorScheme, viewport: { width, height: 900 } });
     const page = await context.newPage();
     for (const path of PATHS) {
       let res;
@@ -22,13 +23,13 @@ try {
       }
       if (!res || !res.ok()) {
         failed = true;
-        console.error(`FAIL ${path} (${colorScheme}): HTTP ${res ? res.status() : 'no response'}`);
+        console.error(`FAIL ${path} (${colorScheme}, ${width}): HTTP ${res ? res.status() : 'no response'}`);
         continue;
       }
       const h1s = await page.locator('h1').count();
       if (h1s !== 1) {
         failed = true;
-        console.error(`FAIL ${path} (${colorScheme}): expected exactly one <h1>, found ${h1s}`);
+        console.error(`FAIL ${path} (${colorScheme}, ${width}): expected exactly one <h1>, found ${h1s}`);
         continue;
       }
       const { violations } = await new AxeBuilder({ page })
@@ -36,10 +37,10 @@ try {
         .analyze();
       if (violations.length) {
         failed = true;
-        console.error(`FAIL ${path} (${colorScheme})`);
+        console.error(`FAIL ${path} (${colorScheme}, ${width})`);
         for (const v of violations) console.error(`  ${v.id}: ${v.help} (${v.nodes.length} nodes)`);
       } else {
-        console.log(`ok   ${path} (${colorScheme})`);
+        console.log(`ok   ${path} (${colorScheme}, ${width})`);
       }
     }
     await context.close();
