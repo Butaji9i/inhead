@@ -18,6 +18,7 @@ const shots = [
   title="Inhead — a quiet diary for your headaches"
   description="Inhead is an iPhone app for keeping a simple headache diary. Your entries stay on your device and in your own iCloud."
 >
+  <div class="wrap">
   <section aria-labelledby="hero">
     <h1 id="hero">Inhead</h1>
     <p class="lede">A quiet diary for your headaches.</p>
@@ -39,4 +40,5 @@ const shots = [
       {shots.map((s) => <li><img src={s.src} alt={s.alt} width="390" height="844" loading="lazy" /></li>)}
     </ul>
   </section>
+  </div>
 </Base>

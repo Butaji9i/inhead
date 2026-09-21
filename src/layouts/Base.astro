@@ -1,11 +1,14 @@
 ---
 import '../styles/global.css';
-import { SITE_NAME, CONTACT_EMAIL } from '../config';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_NAME } from '../config';
 
 const fm = Astro.props.frontmatter ?? {};
 const title: string = fm.title ?? Astro.props.title ?? SITE_NAME;
 const description: string = fm.description ?? Astro.props.description ?? '';
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const current = Astro.url.pathname === '/' ? 'home' : Astro.url.pathname.startsWith('/privacy') ? 'privacy' : undefined;
 ---
 <!doctype html>
 <html lang="en">
@@ -15,12 +18,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content={SITE_NAME} />
-    <meta property="og:title" content={title} />
-    {description && <meta property="og:description" content={description} />}
-    <meta property="og:url" content={canonical} />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <meta name="color-scheme" content="light dark" />
   </head>
   <body>
@@ -28,16 +26,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <header class="site">
       <div class="wrap">
         <a class="wordmark" href="/">{SITE_NAME}</a>
-        <nav aria-label="Main"><a href="/privacy/">Privacy</a></nav>
+        <Nav current={current} />
       </div>
     </header>
-    <main id="main" class="wrap" tabindex="-1"><slot /></main>
-    <footer class="site">
-      <div class="wrap">
-        <p>Questions? <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> · <a href="/privacy/">Privacy policy</a></p>
-        <p>Inhead is a diary, not medical advice.</p>
-        <p>© {SITE_NAME}</p>
-      </div>
-    </footer>
+    <main id="main" tabindex="-1"><slot /></main>
+    <Footer />
   </body>
 </html>

@@ -1,0 +1,14 @@
+---
+import { SITE_NAME, CONTACT_EMAIL } from '../config';
+import { footer, disclaimer } from '../data/copy.mjs';
+---
+<footer class="site">
+  <div class="wrap">
+    <div class="fcols">
+      <div><h2>{SITE_NAME}</h2><p>{footer.blurb}</p></div>
+      <div><h2>Support</h2><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></div>
+      <div><h2>Site</h2><a href="/">Home</a><a href="/privacy/">Privacy policy</a></div>
+    </div>
+    <p class="disc">{disclaimer}<br />© {SITE_NAME}</p>
+  </div>
+</footer>
