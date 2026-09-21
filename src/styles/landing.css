@@ -25,7 +25,7 @@
 }
 .dev { position: absolute; background: #15171a; overflow: hidden; transform-style: preserve-3d; border: 1px solid #3a3d41; }
 .dev picture { display: block; overflow: hidden; }
-.dev img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.dev img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; -webkit-user-drag: none; }
 .dev::after {
   content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
   background: linear-gradient(115deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,0) 32%, rgba(255,255,255,0) 68%, rgba(255,255,255,.07) 100%);
@@ -75,7 +75,7 @@
 }
 .shot { display: grid; place-items: center; background: var(--band); border-radius: 32px; padding: 2.75rem 0; }
 .crop { width: min(330px, 84%); overflow: hidden; border-radius: 26px; box-shadow: 0 30px 60px -28px rgba(0, 0, 0, 0.35); background: var(--band); }
-.crop img { display: block; width: 100%; height: auto; }
+.crop img { display: block; width: 100%; height: auto; -webkit-user-drag: none; }
 .crop-record { aspect-ratio: 330 / 620; }
 .crop-see { aspect-ratio: 330 / 390; }
 .crop-share { aspect-ratio: 1; }
