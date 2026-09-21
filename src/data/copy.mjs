@@ -33,7 +33,7 @@ export const rows = [
     eyebrow: '3 · Share',
     title: 'Take it to your doctor.',
     lead: 'Export a report you can hand over, carrying the numbers and the definitions behind them.',
-    points: ['Every figure comes with its definition', 'Nothing leaves your device unless you send it'],
+    points: ['Every figure comes with its definition', 'The report goes only where you choose to send it'],
   },
 ];
 
