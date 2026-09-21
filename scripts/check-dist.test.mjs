@@ -142,10 +142,11 @@ test('store markup is allowed once STORE_URL is set', () => {
 });
 
 test('missing required assets are each reported', () => {
-  const all = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'icon-512.png'];
+  const all = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'icon-512.png', 'icon-32.png', 'icon-192.png'];
   assert.deepEqual(checkRequiredAssets(all), []);
   assert.equal(checkRequiredAssets(all.filter((p) => p !== 'og.png')).length, 1);
-  assert.equal(checkRequiredAssets([]).length, 6);
+  assert.equal(checkRequiredAssets([]).length, 8);
+  assert.equal(checkRequiredAssets(all.filter((p) => p !== 'icon-192.png')).length, 1);
 });
 
 // Fix round 1 regression tests
@@ -183,11 +184,11 @@ test('apple-itunes-app lowercase while STORE_URL is null is flagged', () => {
 });
 
 test('checkRequiredAssets accepts ./og.png', () => {
-  const all = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', './og.png', 'icon-512.png'];
+  const all = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', './og.png', 'icon-512.png', 'icon-32.png', 'icon-192.png'];
   assert.deepEqual(checkRequiredAssets(all), []);
 });
 test('checkRequiredAssets accepts backslash paths', () => {
-  const all = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', '.\\og.png', 'icon-512.png'];
+  const all = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', '.\\og.png', 'icon-512.png', 'icon-32.png', 'icon-192.png'];
   assert.deepEqual(checkRequiredAssets(all), []);
 });
 

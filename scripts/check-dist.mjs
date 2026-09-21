@@ -112,7 +112,7 @@ export function checkStoreGating(files, storeIsNull) {
   return out;
 }
 
-const REQUIRED_ASSETS = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'icon-512.png'];
+const REQUIRED_ASSETS = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'icon-512.png', 'icon-32.png', 'icon-192.png'];
 export function checkRequiredAssets(paths) {
   const normalized = paths.map((p) => {
     let normalized = p.replace(/\\/g, '/');
