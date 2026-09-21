@@ -2,8 +2,19 @@
 import Base from '../layouts/Base.astro';
 import DeviceGroup from '../components/DeviceGroup.astro';
 import StoreLabel from '../components/StoreLabel.astro';
-import { hero } from '../data/copy.mjs';
+import FeatureRow from '../components/FeatureRow.astro';
+import PrivacyBand from '../components/PrivacyBand.astro';
+import Shot from '../components/Shot.astro';
+import { hero, rows, cta } from '../data/copy.mjs';
+import allLight from '../assets/screens/iphone-all-light.webp';
+import allDark from '../assets/screens/iphone-all-dark.webp';
+import weekLight from '../assets/screens/iphone-week-light.webp';
+import weekDark from '../assets/screens/iphone-week-dark.webp';
+import doctorLight from '../assets/screens/iphone-data-doctor-light.webp';
+import doctorDark from '../assets/screens/iphone-data-doctor-dark.webp';
 import '../styles/landing.css';
+
+const [record, see, share] = rows;
 ---
 <Base
   title="Inhead — your headache diary, kept in order"
@@ -18,6 +29,32 @@ import '../styles/landing.css';
         <p class="note">{hero.note}</p>
       </div>
       <DeviceGroup />
+    </div>
+  </section>
+  <div class="wrap rows">
+    <FeatureRow {...record}>
+      <div class="crop crop-record"><Shot light={allLight} dark={allDark} width={660}
+        alt="A day's log in Inhead: a list of times with what was recorded at each, such as a drink, pain rising, a medication, a symptom and pain falling" /></div>
+    </FeatureRow>
+    <FeatureRow {...see} flip>
+      <div class="crop crop-see"><Shot light={weekLight} dark={weekDark} width={660}
+        alt="Inhead's week view: a strip of days with headache days drawn as colour blobs, and below it the day's episode cards with their pain curves" /></div>
+    </FeatureRow>
+    <FeatureRow {...share}>
+      <div class="crop crop-share"><Shot light={doctorLight} dark={doctorDark} width={660}
+        alt="Inhead's Data screen: a For your doctor card above a Your year grid of small squares, darker red for higher pain" /></div>
+    </FeatureRow>
+  </div>
+
+  <PrivacyBand />
+
+  <section class="cta" aria-labelledby="cta-title">
+    <div class="wrap">
+      <div class="panel">
+        <h2 id="cta-title">{cta.title}</h2>
+        <p>{cta.text}</p>
+        <StoreLabel />
+      </div>
     </div>
   </section>
 </Base>

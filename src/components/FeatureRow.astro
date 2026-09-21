@@ -1,0 +1,15 @@
+---
+interface Props { eyebrow: string; title: string; lead: string; points: string[]; flip?: boolean }
+const { eyebrow, title, lead, points, flip = false } = Astro.props;
+---
+<div class:list={['row', { flip }]}>
+  <div class="row-text">
+    <p class="eyebrow">{eyebrow}</p>
+    <h2>{title}</h2>
+    <p class="row-lead">{lead}</p>
+    <ul class="row-points">
+      {points.map((p) => <li>{p}</li>)}
+    </ul>
+  </div>
+  <div class="shot"><slot /></div>
+</div>
