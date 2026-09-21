@@ -1,14 +1,24 @@
-# Inhead website
+# inhead.app
 
-Source of https://inhead.app: a landing page for the Inhead headache diary and
-its privacy policy.
+Source of the website at https://inhead.app: a static site built with
+[Astro](https://astro.build) and deployed to GitHub Pages by GitHub Actions.
 
-- `src/pages/privacy.md` is the source of truth for the privacy policy, served
-  at `/privacy/`. Change it through a pull request.
-- `src/config.ts` holds the App Store URL. While it is `null`, the page shows a
-  "Coming soon" label.
-- Built with Astro as static HTML and deployed to GitHub Pages by GitHub Actions.
-- `public/CNAME` keeps the custom domain in every build.
+## Develop
 
-Develop: `npm ci`, then `npm run dev`. Before opening a pull request run
-`npm test`, `npm run build` and `npm run check`.
+```sh
+npm ci
+npm run dev        # local dev server
+npm test           # unit tests
+npm run build      # static build into dist/
+npm run check      # checks on the built site
+npm run preview    # serve dist/ on :4321 (needed for npm run a11y)
+npm run a11y       # accessibility scan of the built pages
+```
+
+## Layout
+
+- `src/pages/` pages; `src/pages/privacy.md` is the privacy policy, served at `/privacy/`
+- `src/components/`, `src/layouts/`, `src/styles/` the UI
+- `src/data/copy.mjs` page text; `src/config.ts` site settings
+- `src/assets/screens/` optimised screenshots; `public/` static files (incl. `CNAME`)
+- `scripts/` build checks, tests and the accessibility scan
