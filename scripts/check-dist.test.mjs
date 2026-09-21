@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { findViolations, checkRequired, checkJsonLd, checkImgAlt, checkStoreGating, checkRequiredAssets } from './check-dist.mjs';
+import { findViolations, checkRequired, checkJsonLd, checkImgAlt, checkStoreGating, checkRequiredAssets, storeUrlState } from './check-dist.mjs';
 
 const page = (content, path = 'index.html') => ({ path, content });
 
@@ -189,4 +189,13 @@ test('checkRequiredAssets accepts ./og.png', () => {
 test('checkRequiredAssets accepts backslash paths', () => {
   const all = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', '.\\og.png', 'icon-512.png'];
   assert.deepEqual(checkRequiredAssets(all), []);
+});
+
+test('storeUrlState', () => {
+  assert.equal(storeUrlState('export const STORE_URL: string | null = null;'), 'null');
+  assert.equal(storeUrlState('export const STORE_URL = null;'), 'null');
+  assert.equal(storeUrlState("export const STORE_URL: string | null = 'https://apps.apple.com/app/id1';"), 'set');
+  assert.equal(storeUrlState('// STORE_URL = null\n/* export const STORE_URL = null; */'), 'unknown');
+  assert.equal(storeUrlState(''), 'unknown');
+  assert.equal(storeUrlState('export const OTHER = null;'), 'unknown');
 });

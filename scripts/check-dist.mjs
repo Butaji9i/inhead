@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative, extname } from 'node:path';
+import { join, relative, extname, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ALLOWED_EMAIL = 'support@inhead.app';
@@ -129,6 +129,13 @@ function walk(dir) {
   });
 }
 
+export function storeUrlState(configText) {
+  const text = String(configText ?? '').replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\s)\/\/.*$/gm, '$1');
+  const m = /export\s+const\s+STORE_URL\b[^=\n]*=\s*(null\b|'[^']*'|"[^"]*")/.exec(text);
+  if (!m) return 'unknown';
+  return m[1] === 'null' ? 'null' : 'set';
+}
+
 function main() {
   const dist = process.argv[2] ?? 'dist';
   const paths = walk(dist).map((p) => relative(dist, p).split('\\').join('/'));
@@ -138,15 +145,19 @@ function main() {
   }));
   const cname = paths.includes('CNAME') ? readFileSync(join(dist, 'CNAME'), 'utf8') : null;
   const extras = (process.env.FORBIDDEN_STRINGS ?? '').split(',');
-  const configText = (() => { try { return readFileSync('src/config.ts', 'utf8'); } catch { return ''; } })();
-  const storeIsNull = /STORE_URL\s*:\s*string\s*\|\s*null\s*=\s*null/.test(configText);
+  let state = 'unknown';
+  try {
+    state = storeUrlState(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/config.ts'), 'utf8'));
+  } catch {}
   const problems = [
     ...checkRequired(paths, cname),
     ...checkRequiredAssets(paths),
     ...findViolations(files, extras),
     ...checkJsonLd(files),
     ...checkImgAlt(files),
-    ...checkStoreGating(files, storeIsNull),
+    ...(state === 'unknown'
+      ? ['cannot determine STORE_URL from src/config.ts, so the store-markup gate cannot run']
+      : checkStoreGating(files, state === 'null')),
   ];
   if (problems.length) {
     console.error(problems.join('\n'));
