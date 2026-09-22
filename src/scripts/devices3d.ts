@@ -61,10 +61,10 @@ export async function mount(stage: HTMLElement, urls: { iphone: string; ipad: st
     };
 
     const resize = () => {
-      if (!stage.clientWidth || !stage.clientHeight) return;
       // The canvas bleeds past the stage (see .stage-3d), as the devices overflow it; `bleed` is how far.
       const bleed = -canvas.offsetLeft;
       const w = canvas.clientWidth, h = canvas.clientHeight;
+      if (!w || !h) return; // hidden on narrow screens
       renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
       renderer.setSize(w, h, false);
       // CSS `perspective: d` with `perspective-origin: ox oy`: an eye d px in front of that point, looking straight in.
@@ -80,7 +80,7 @@ export async function mount(stage: HTMLElement, urls: { iphone: string; ipad: st
       camera.position.set(ox, -oy, d);
       camera.setViewOffset(fullW, fullH, fullW / 2 - cx, fullH / 2 - cy, w, h);
     };
-    const render = () => { place(); renderer.render(scene, camera); };
+    const render = () => { if (canvas.clientWidth) { place(); renderer.render(scene, camera); } };
 
     stage.append(canvas); // still transparent (opacity 0) until .is-3d
     resize();
