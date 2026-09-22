@@ -1,5 +1,5 @@
 // The hero's iPhone and iPad as real 3D models. DeviceGroup.astro's flat screenshots are the fallback: on wide
-// screens they start hidden (.will-3d) and this fades in once everything has loaded. Resolves false, having
+// screens they start hidden (html.will-3d) and this fades in once everything has loaded. Resolves false, having
 // removed itself, if it can't show the models; the caller then brings the screenshots back.
 // Each model fills its .dev box, placed by the rig's perspective, transforms and sway animation, read from the
 // computed styles every frame. So landing.css stays the one place to change the layout.

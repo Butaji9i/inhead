@@ -14,6 +14,7 @@ const current = Astro.url.pathname === '/' ? 'home' : Astro.url.pathname.startsW
 <html lang="en">
   <head>
     <Seo title={title} description={description} />
+    <slot name="head" />
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>

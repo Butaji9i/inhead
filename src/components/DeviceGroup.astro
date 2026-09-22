@@ -21,21 +21,13 @@ const ipadDark = ipad['../assets/screens/ipad-hero-dark.webp'];
     </div>
   </div>
 </div>
-<script is:inline>
-  // Before first paint: on wide screens that can show the 3D devices, hide the flat screenshots so they don't flash first.
-  (function () {
-    var stage = document.currentScript.previousElementSibling;
-    var saveData = navigator.connection && navigator.connection.saveData;
-    if (stage.querySelector('.ipad') && matchMedia('(min-width: 821px)').matches && !saveData && 'WebGL2RenderingContext' in window) {
-      stage.classList.add('will-3d');
-    }
-  })();
-</script>
 <script>
   // Load the 3D devices straight away; they fade in once ready. If they fail, or are slow, the screenshots fade in instead.
-  const stage = document.querySelector<HTMLElement>('.stage.will-3d');
-  if (stage) {
-    const flat = () => stage.classList.remove('will-3d');
+  // <html> gets .will-3d from the inline script in index.astro's <head>.
+  const stage = document.querySelector<HTMLElement>('.stage');
+  const flat = () => document.documentElement.classList.remove('will-3d');
+  if (stage && !stage.querySelector('.ipad')) flat();
+  else if (stage && document.documentElement.classList.contains('will-3d')) {
     const slow = setTimeout(flat, 6000);
     import('../scripts/devices3d')
       .then((m) => m.mount(stage, { iphone: '/models/iphone.glb', ipad: '/models/ipad.glb' }))

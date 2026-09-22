@@ -36,7 +36,7 @@
 .stage:not(:has(.ipad)) .iphone { position: relative; left: auto; top: auto; }
 .stage-3d { position: absolute; inset: -120px; width: calc(100% + 240px); height: calc(100% + 240px); opacity: 0; transition: opacity 0.8s ease; pointer-events: none; }
 .stage.is-3d .stage-3d { opacity: 1; }
-.stage:is(.will-3d, .is-3d) .rig { opacity: 0; }
+.will-3d .rig, .stage.is-3d .rig { opacity: 0; }
 
 @media (prefers-reduced-motion: no-preference) {
   .rig { animation: sway 9s ease-in-out infinite alternate; }
@@ -53,7 +53,7 @@
   .ipad { display: none; }
   .iphone { width: 230px; height: 500px; }
   .stage-3d { display: none; }
-  .stage:is(.will-3d, .is-3d) .rig { opacity: 1; }
+  .will-3d .rig, .stage.is-3d .rig { opacity: 1; }
 }
 
 /* ---------- feature rows ---------- */
