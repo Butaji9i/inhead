@@ -1,8 +1,8 @@
-// The hero's iPhone and iPad as real 3D models. The CSS devices in DeviceGroup.astro stay underneath as the
-// fallback: on wide screens they start hidden (.will-3d) and this fades in once everything has loaded. Resolves
-// false, having removed itself, if it can't show them; the caller then brings the CSS devices back.
-// The scene copies the CSS rig exactly: each model fills its .dev box, placed by the same perspective, transforms
-// and sway animation, read from the computed styles every frame. So the CSS stays the one place to change the layout.
+// The hero's iPhone and iPad as real 3D models. DeviceGroup.astro's flat screenshots are the fallback: on wide
+// screens they start hidden (.will-3d) and this fades in once everything has loaded. Resolves false, having
+// removed itself, if it can't show the models; the caller then brings the screenshots back.
+// Each model fills its .dev box, placed by the rig's perspective, transforms and sway animation, read from the
+// computed styles every frame. So landing.css stays the one place to change the layout.
 import {
   ACESFilmicToneMapping, Box3, DirectionalLight, Group, Matrix4, Mesh, MeshBasicMaterial, PerspectiveCamera,
   PMREMGenerator, Scene, SRGBColorSpace, Texture, Vector3, WebGLRenderer, type Object3D,
@@ -62,7 +62,7 @@ export async function mount(stage: HTMLElement, urls: { iphone: string; ipad: st
 
     const resize = () => {
       if (!stage.clientWidth || !stage.clientHeight) return;
-      // The canvas bleeds past the stage (see .stage-3d), as the CSS devices overflow it; `bleed` is how far.
+      // The canvas bleeds past the stage (see .stage-3d), as the devices overflow it; `bleed` is how far.
       const bleed = -canvas.offsetLeft;
       const w = canvas.clientWidth, h = canvas.clientHeight;
       renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -87,7 +87,7 @@ export async function mount(stage: HTMLElement, urls: { iphone: string; ipad: st
     render();
     requestAnimationFrame(() => stage.classList.add('is-3d'));
 
-    // The CSS sway keeps running (invisibly) under the canvas; while it can move, follow it every frame.
+    // The rig's CSS sway keeps running (invisibly) under the canvas; while it can move, follow it every frame.
     const still = matchMedia('(prefers-reduced-motion: reduce)');
     let visible = true;
     const loop = () => renderer.setAnimationLoop(still.matches || !visible || document.hidden ? null : render);
@@ -103,7 +103,7 @@ export async function mount(stage: HTMLElement, urls: { iphone: string; ipad: st
     renderer.dispose();
     canvas.remove();
     stage.classList.remove('is-3d');
-    console.warn('3D devices unavailable, showing the flat ones', err);
+    console.warn('3D devices unavailable, showing the screenshots', err);
     return false;
   }
 }

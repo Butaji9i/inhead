@@ -22,7 +22,7 @@ const ipadDark = ipad['../assets/screens/ipad-hero-dark.webp'];
   </div>
 </div>
 <script is:inline>
-  // Before first paint: on wide screens that can show the 3D devices, hide the CSS ones so they don't flash first.
+  // Before first paint: on wide screens that can show the 3D devices, hide the flat screenshots so they don't flash first.
   (function () {
     var stage = document.currentScript.previousElementSibling;
     var saveData = navigator.connection && navigator.connection.saveData;
@@ -32,7 +32,7 @@ const ipadDark = ipad['../assets/screens/ipad-hero-dark.webp'];
   })();
 </script>
 <script>
-  // Load the 3D devices straight away; they fade in once ready. If they fail, or are slow, the CSS ones fade in instead.
+  // Load the 3D devices straight away; they fade in once ready. If they fail, or are slow, the screenshots fade in instead.
   const stage = document.querySelector<HTMLElement>('.stage.will-3d');
   if (stage) {
     const flat = () => stage.classList.remove('will-3d');

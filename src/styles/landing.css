@@ -17,35 +17,24 @@
 .store-soon { border: 2px dashed var(--line); color: var(--text); }
 
 /* ---------- 3D device group ---------- */
+/* The .dev boxes place the devices; src/scripts/devices3d.ts draws a real 3D model into each. Without 3D
+   (no WebGL, a failed load, narrow screens) the screenshots themselves show, as rounded cards. */
 .stage { position: relative; height: 640px; perspective: 1500px; perspective-origin: 30% 40%; }
 .stage:not(:has(.ipad)) { display: grid; place-items: center; }
 .rig {
   position: absolute; inset: 0; transform-style: preserve-3d;
   transform: rotateX(9deg) rotateY(-24deg) rotateZ(1.5deg) translateX(20px);
+  transition: opacity 0.8s ease;
 }
-.dev { position: absolute; background: #15171a; overflow: hidden; transform-style: preserve-3d; border: 1px solid #3a3d41; }
-.dev picture { display: block; overflow: hidden; }
+.dev { position: absolute; }
+.dev picture { display: block; height: 100%; overflow: hidden; box-shadow: 0 0 0 1px var(--line), 0 30px 60px -28px rgba(0, 0, 0, 0.45); }
 .dev img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; -webkit-user-drag: none; }
-.dev::after {
-  content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-  background: linear-gradient(115deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,0) 32%, rgba(255,255,255,0) 68%, rgba(255,255,255,.07) 100%);
-}
-.ipad {
-  left: 20px; top: 20px; width: 430px; height: 573px; border-radius: 38px; padding: 13px; transform: translateZ(-30px);
-  box-shadow: 1px 0 #2b2e32, 2px 0 #292c30, 3px 0 #272a2e, 4px 0 #25282c, 5px 0 #232629, 6px 0 #212427,
-    7px 0 #1f2225, 8px 0 #1d2023, 9px 0 #1b1e21, 10px 0 #191c1f, 12px 26px 40px -4px rgba(0,0,0,.45);
-}
-.ipad picture { border-radius: 26px; height: 100%; }
-.iphone {
-  left: 300px; top: 140px; width: 230px; height: 500px; border-radius: 44px; padding: 10px; transform: translateZ(90px);
-  box-shadow: 1px 0 #33363a, 2px 0 #303336, 3px 0 #2d3033, 4px 0 #2a2d30, 5px 0 #272a2d, 6px 0 #24272a,
-    7px 0 #212427, 10px 34px 46px -6px rgba(0,0,0,.55);
-}
-.iphone picture { border-radius: 35px; height: 100%; }
+.ipad { left: 20px; top: 20px; width: 430px; height: 573px; transform: translateZ(-30px); }
+.ipad picture { border-radius: 20px; }
+.iphone { left: 300px; top: 140px; width: 230px; height: 500px; transform: translateZ(90px); }
+.iphone picture { border-radius: 32px; }
 .stage:not(:has(.ipad)) .iphone { position: relative; left: auto; top: auto; }
-/* the real 3D devices (src/scripts/devices3d.ts) fade in over the CSS ones */
 .stage-3d { position: absolute; inset: -120px; width: calc(100% + 240px); height: calc(100% + 240px); opacity: 0; transition: opacity 0.8s ease; pointer-events: none; }
-.rig { transition: opacity 0.8s ease; }
 .stage.is-3d .stage-3d { opacity: 1; }
 .stage:is(.will-3d, .is-3d) .rig { opacity: 0; }
 
@@ -62,7 +51,7 @@
   .rig { position: static; transform: none; animation: none; }
   .dev { position: relative; left: auto; top: auto; transform: none; }
   .ipad { display: none; }
-  .iphone { width: 250px; height: 500px; }
+  .iphone { width: 230px; height: 500px; }
   .stage-3d { display: none; }
   .stage:is(.will-3d, .is-3d) .rig { opacity: 1; }
 }
