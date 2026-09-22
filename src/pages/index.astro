@@ -20,6 +20,12 @@ const [record, see, share] = rows;
   title="Inhead — your headache diary, kept in order"
   description="Inhead is a headache diary for iPhone and iPad. Record what happened, see what your own records add up to, and take it to your doctor. No account, no server of ours."
 >
+  <script is:inline slot="head">
+    // In <head>, so it's set before the hero is first styled: on wide screens that can show the 3D devices,
+    // the hero's screenshots start hidden and the models fade in instead (see DeviceGroup.astro).
+    if (matchMedia('(min-width: 821px)').matches && !(navigator.connection && navigator.connection.saveData)
+      && 'WebGL2RenderingContext' in window) document.documentElement.classList.add('will-3d');
+  </script>
   <section class="hero" aria-labelledby="hero-title">
     <div class="wrap hero-grid">
       <div>

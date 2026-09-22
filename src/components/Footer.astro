@@ -1,6 +1,6 @@
 ---
 import { SITE_NAME, CONTACT_EMAIL } from '../config';
-import { footer, disclaimer } from '../data/copy.mjs';
+import { footer, disclaimer, modelCredits } from '../data/copy.mjs';
 ---
 <footer class="site">
   <div class="wrap">
@@ -10,5 +10,6 @@ import { footer, disclaimer } from '../data/copy.mjs';
       <div><h2>Site</h2><a href="/">Home</a><a href="/privacy/">Privacy policy</a></div>
     </div>
     <p class="disc">{disclaimer}<br />© {SITE_NAME}</p>
+    <p class="credits">3D models:{modelCredits.map((m, i) => <>{i ? ';' : ''} <a href={m.url}>{m.what}</a> by {m.by}</>)}, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</p>
   </div>
 </footer>

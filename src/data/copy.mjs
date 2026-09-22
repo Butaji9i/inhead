@@ -57,5 +57,11 @@ export const footer = {
   blurb: 'A headache diary for iPhone and iPad.',
 };
 
+// The hero's 3D models (public/models, built by scripts/make-models.mjs) are CC BY 4.0 and need crediting.
+export const modelCredits = [
+  { what: 'iPhone 17 Pro', by: 'Ranguel', url: 'https://sketchfab.com/3d-models/iphone-17-pro-4541aa8a28324b33a2baaf81d263aaec' },
+  { what: 'iPad Pro 13″', by: 'polyman', url: 'https://sketchfab.com/3d-models/ipad-pro13in-black-m4-32e1748e3b6840108ededf4359112b2f' },
+];
+
 export const disclaimer =
   'Inhead is a headache diary. It describes what was recorded, not a diagnosis, and is not medical advice — talk to a doctor about your symptoms and treatment.';

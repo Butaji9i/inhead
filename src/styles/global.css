@@ -36,6 +36,8 @@
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
+/* Browsers draw alt text in the image's box until it loads (or if it fails); keep it for screen readers, not the eye. */
+img { color: transparent; }
 
 body {
   margin: 0;
@@ -70,6 +72,8 @@ footer.site { border-top: 1px solid var(--line); padding-block: 2.75rem 2.25rem;
 .fcols p { margin: 0; }
 .fcols a { display: block; padding: 0.15rem 0; color: var(--muted); text-decoration: none; }
 .fcols a:hover { color: var(--text); text-decoration: underline; }
+.credits { margin: 0.6rem 0 0; font-size: 0.8rem; }
+.credits a { color: inherit; }
 .disc { margin: 2rem 0 0; padding-top: 1.25rem; border-top: 1px solid var(--line); font-size: 0.875rem; max-width: none; }
 
 /* markdown documents (privacy) */

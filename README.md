@@ -21,4 +21,6 @@ npm run a11y       # accessibility scan of the built pages
 - `src/components/`, `src/layouts/`, `src/styles/` the UI
 - `src/data/copy.mjs` page text; `src/config.ts` site settings
 - `src/assets/screens/` optimised screenshots; `public/` static files (incl. `CNAME`)
+- `public/models/` the hero's 3D iPhone and iPad, built from the Sketchfab downloads by
+  `node scripts/make-models.mjs <iphone_17_pro.glb> <ipad_pro13in_black_m4.glb>`; drawn by `src/scripts/devices3d.ts`
 - `scripts/` build checks, tests and the accessibility scan
