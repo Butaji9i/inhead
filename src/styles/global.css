@@ -36,6 +36,8 @@
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
+/* Browsers draw alt text in the image's box until it loads (or if it fails); keep it for screen readers, not the eye. */
+img { color: transparent; }
 
 body {
   margin: 0;
