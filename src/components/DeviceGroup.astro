@@ -21,3 +21,14 @@ const ipadDark = ipad['../assets/screens/ipad-hero-dark.webp'];
     </div>
   </div>
 </div>
+<script>
+  // Swap the CSS devices for real 3D models on wide screens, once the page has finished loading.
+  const stage = document.querySelector<HTMLElement>('.stage');
+  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+  if (stage?.querySelector('.ipad') && matchMedia('(min-width: 821px)').matches && !saveData && 'WebGL2RenderingContext' in window) {
+    const go = () => import('../scripts/devices3d').then((m) => m.mount(stage, { iphone: '/models/iphone.glb', ipad: '/models/ipad.glb' }));
+    const idle = () => ('requestIdleCallback' in window ? requestIdleCallback(go, { timeout: 2000 }) : setTimeout(go, 200));
+    if (document.readyState === 'complete') idle();
+    else addEventListener('load', idle, { once: true });
+  }
+</script>
