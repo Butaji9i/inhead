@@ -40,7 +40,7 @@ export async function mount(stage: HTMLElement, urls: { iphone: string; ipad: st
     const [iphone, ipad] = await Promise.all([
       loader.loadAsync(urls.iphone).then((g) => g.scene),
       loader.loadAsync(urls.ipad).then((g) => g.scene),
-      phoneImg.decode(), ipadImg.decode(),
+      loaded(phoneImg), loaded(ipadImg),
     ]);
     const anisotropy = renderer.capabilities.getMaxAnisotropy();
     showScreenshot(iphone, phoneImg, anisotropy);
@@ -134,6 +134,17 @@ function fitBox(model: Object3D, el: HTMLElement) {
       holder.matrixWorldNeedsUpdate = true;
     },
   };
+}
+
+// Resolves once the <img> has loaded. The iPad's is lazy (phones never show it), so a reload scrolled past the
+// hero would leave it unrequested; start it now. (Firefox rejects decode() on such an image, so wait for load.)
+function loaded(img: HTMLImageElement) {
+  img.loading = 'eager';
+  if (img.complete && img.naturalWidth) return Promise.resolve();
+  return new Promise<void>((resolve, reject) => {
+    img.addEventListener('load', () => resolve(), { once: true });
+    img.addEventListener('error', () => reject(new Error(`screenshot failed to load: ${img.currentSrc}`)), { once: true });
+  });
 }
 
 // Paints the page's own <img> (already downloaded, and already the right colour scheme) onto the model's screen.
