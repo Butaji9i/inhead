@@ -21,14 +21,24 @@ const ipadDark = ipad['../assets/screens/ipad-hero-dark.webp'];
     </div>
   </div>
 </div>
+<script is:inline>
+  // Before first paint: on wide screens that can show the 3D devices, hide the CSS ones so they don't flash first.
+  (function () {
+    var stage = document.currentScript.previousElementSibling;
+    var saveData = navigator.connection && navigator.connection.saveData;
+    if (stage.querySelector('.ipad') && matchMedia('(min-width: 821px)').matches && !saveData && 'WebGL2RenderingContext' in window) {
+      stage.classList.add('will-3d');
+    }
+  })();
+</script>
 <script>
-  // Swap the CSS devices for real 3D models on wide screens, once the page has finished loading.
-  const stage = document.querySelector<HTMLElement>('.stage');
-  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
-  if (stage?.querySelector('.ipad') && matchMedia('(min-width: 821px)').matches && !saveData && 'WebGL2RenderingContext' in window) {
-    const go = () => import('../scripts/devices3d').then((m) => m.mount(stage, { iphone: '/models/iphone.glb', ipad: '/models/ipad.glb' }));
-    const idle = () => ('requestIdleCallback' in window ? requestIdleCallback(go, { timeout: 2000 }) : setTimeout(go, 200));
-    if (document.readyState === 'complete') idle();
-    else addEventListener('load', idle, { once: true });
+  // Load the 3D devices straight away; they fade in once ready. If they fail, or are slow, the CSS ones fade in instead.
+  const stage = document.querySelector<HTMLElement>('.stage.will-3d');
+  if (stage) {
+    const flat = () => stage.classList.remove('will-3d');
+    const slow = setTimeout(flat, 6000);
+    import('../scripts/devices3d')
+      .then((m) => m.mount(stage, { iphone: '/models/iphone.glb', ipad: '/models/ipad.glb' }))
+      .then((shown) => { if (shown) clearTimeout(slow); else flat(); }, flat);
   }
 </script>

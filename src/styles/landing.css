@@ -44,10 +44,10 @@
 .iphone picture { border-radius: 35px; height: 100%; }
 .stage:not(:has(.ipad)) .iphone { position: relative; left: auto; top: auto; }
 /* the real 3D devices (src/scripts/devices3d.ts) fade in over the CSS ones */
-.stage-3d { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.8s ease; pointer-events: none; }
+.stage-3d { position: absolute; inset: -120px; width: calc(100% + 240px); height: calc(100% + 240px); opacity: 0; transition: opacity 0.8s ease; pointer-events: none; }
 .rig { transition: opacity 0.8s ease; }
 .stage.is-3d .stage-3d { opacity: 1; }
-.stage.is-3d .rig { opacity: 0; }
+.stage:is(.will-3d, .is-3d) .rig { opacity: 0; }
 
 @media (prefers-reduced-motion: no-preference) {
   .rig { animation: sway 9s ease-in-out infinite alternate; }
@@ -64,7 +64,7 @@
   .ipad { display: none; }
   .iphone { width: 250px; height: 500px; }
   .stage-3d { display: none; }
-  .stage.is-3d .rig { opacity: 1; }
+  .stage:is(.will-3d, .is-3d) .rig { opacity: 1; }
 }
 
 /* ---------- feature rows ---------- */

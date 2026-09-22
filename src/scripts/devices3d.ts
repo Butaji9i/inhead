@@ -1,5 +1,6 @@
 // The hero's iPhone and iPad as real 3D models. The CSS devices in DeviceGroup.astro stay underneath as the
-// first paint and the fallback; this fades in over them once everything has loaded, and removes itself on any error.
+// fallback: on wide screens they start hidden (.will-3d) and this fades in once everything has loaded. Resolves
+// false, having removed itself, if it can't show them; the caller then brings the CSS devices back.
 // The scene copies the CSS rig exactly: each model fills its .dev box, placed by the same perspective, transforms
 // and sway animation, read from the computed styles every frame. So the CSS stays the one place to change the layout.
 import {
@@ -10,13 +11,13 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
-export async function mount(stage: HTMLElement, urls: { iphone: string; ipad: string }) {
+export async function mount(stage: HTMLElement, urls: { iphone: string; ipad: string }): Promise<boolean> {
   const rigEl = stage.querySelector<HTMLElement>('.rig');
   const phoneEl = stage.querySelector<HTMLElement>('.dev.iphone');
   const ipadEl = stage.querySelector<HTMLElement>('.dev.ipad');
   const phoneImg = phoneEl?.querySelector('img');
   const ipadImg = ipadEl?.querySelector('img');
-  if (!rigEl || !phoneEl || !ipadEl || !phoneImg || !ipadImg) return;
+  if (!rigEl || !phoneEl || !ipadEl || !phoneImg || !ipadImg) return false;
 
   const canvas = document.createElement('canvas');
   canvas.className = 'stage-3d';
@@ -60,27 +61,30 @@ export async function mount(stage: HTMLElement, urls: { iphone: string; ipad: st
     };
 
     const resize = () => {
-      const { clientWidth: w, clientHeight: h } = stage;
-      if (!w || !h) return;
+      if (!stage.clientWidth || !stage.clientHeight) return;
+      // The canvas bleeds past the stage (see .stage-3d), as the CSS devices overflow it; `bleed` is how far.
+      const bleed = -canvas.offsetLeft;
+      const w = canvas.clientWidth, h = canvas.clientHeight;
       renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
       renderer.setSize(w, h, false);
       // CSS `perspective: d` with `perspective-origin: ox oy`: an eye d px in front of that point, looking straight in.
       const s = getComputedStyle(stage);
       const d = parseFloat(s.perspective) || 1500;
       const [ox, oy] = s.perspectiveOrigin.split(' ').map(parseFloat);
-      const fullW = 2 * Math.max(ox, w - ox), fullH = 2 * Math.max(oy, h - oy);
+      const cx = ox + bleed, cy = oy + bleed; // the eye, in canvas pixels
+      const fullW = 2 * Math.max(cx, w - cx), fullH = 2 * Math.max(cy, h - cy);
       camera.fov = (2 * Math.atan(fullH / 2 / d) * 180) / Math.PI;
       camera.aspect = fullW / fullH;
       camera.near = 10;
       camera.far = d * 4;
       camera.position.set(ox, -oy, d);
-      camera.setViewOffset(fullW, fullH, fullW / 2 - ox, fullH / 2 - oy, w, h);
+      camera.setViewOffset(fullW, fullH, fullW / 2 - cx, fullH / 2 - cy, w, h);
     };
     const render = () => { place(); renderer.render(scene, camera); };
 
+    stage.append(canvas); // still transparent (opacity 0) until .is-3d
     resize();
     render();
-    stage.append(canvas);
     requestAnimationFrame(() => stage.classList.add('is-3d'));
 
     // The CSS sway keeps running (invisibly) under the canvas; while it can move, follow it every frame.
@@ -94,11 +98,13 @@ export async function mount(stage: HTMLElement, urls: { iphone: string; ipad: st
     // The screenshots follow the colour scheme: <picture> swaps its source and the <img> fires load.
     for (const img of [phoneImg, ipadImg]) img.addEventListener('load', render);
     loop();
+    return true;
   } catch (err) {
     renderer.dispose();
     canvas.remove();
     stage.classList.remove('is-3d');
-    console.warn('3D devices unavailable, keeping the flat ones', err);
+    console.warn('3D devices unavailable, showing the flat ones', err);
+    return false;
   }
 }
 
