@@ -16,8 +16,9 @@ the app's database on your iPhone or iPad. Syncing is off until you turn on
 **Sync with iCloud** in Inhead's Settings; then, if you are signed in to iCloud,
 that database is also kept in **your own private iCloud storage**, so the same diary appears on your other devices. That
 storage is yours: it sits in your Apple Account, it counts against your iCloud
-space, and it is governed by Apple's iCloud terms and privacy policy. **We
-cannot read it.** There is no Inhead server, no Inhead account, and no way for
+space, and it is governed by Apple's iCloud terms and privacy policy. What
+Inhead puts there is **end-to-end encrypted**, with keys only your devices
+hold, so neither Apple nor **we can read it.** There is no Inhead server, no Inhead account, and no way for
 us or anyone else to reach your records. You can stop the syncing at any time by
 turning **Sync with iCloud** off in Inhead's Settings, or iCloud off for Inhead in
 the iOS Settings app, and the diary stays on the device.
