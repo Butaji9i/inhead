@@ -43,7 +43,7 @@ export const privacy = {
   lead: 'There is no Inhead server and no Inhead account — nothing of yours for us to read.',
   tiles: [
     { key: 'account', title: 'No account', text: 'No sign-up, no email, no password.' },
-    { key: 'device', title: 'On your device', text: 'And in your own private iCloud if you have iCloud switched on.' },
+    { key: 'device', title: 'On your device', text: 'And in your own private iCloud only if you turn sync on.' },
     { key: 'tracking', title: 'Nothing tracked', text: 'No analytics, no advertising, no tracking across other apps or websites.' },
   ],
 };
