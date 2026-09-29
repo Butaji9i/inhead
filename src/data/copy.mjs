@@ -65,7 +65,7 @@ export const beta = {
   accent: 'Inhead.',
   lede: 'Try Inhead on your iPhone or iPad before it reaches the App Store, and help shape it with what you notice.',
   cta: 'Join the beta on TestFlight',
-  note: 'iPhone and iPad · Through Apple\'s TestFlight',
+  note: 'iPhone and iPad · Through Apple’s TestFlight',
   rows: [
     {
       key: 'what',
@@ -73,7 +73,7 @@ export const beta = {
       title: 'A beta is a head start.',
       lead: 'You use a version that is nearly finished, before it is public. It works, but it is not polished yet.',
       points: [
-        'Delivered through Apple\'s TestFlight app',
+        'Delivered through Apple’s TestFlight app',
         'Runs alongside your other apps like any other',
         'Ends when Inhead is released on the App Store',
       ],
@@ -105,8 +105,8 @@ export const beta = {
     eyebrow: 'How to join',
     title: 'Install TestFlight, then open the invite.',
     steps: [
-      { title: 'Install TestFlight', text: 'TestFlight is Apple\'s own app for trying apps before release. Get it from the App Store.' },
-      { title: 'Open the invite link', text: 'Tap "Join the beta" on this page from your iPhone or iPad. TestFlight opens.' },
+      { title: 'Install TestFlight', text: 'TestFlight is Apple’s own app for trying apps before release. Get it from the App Store.' },
+      { title: 'Open the invite link', text: 'Tap “Join the beta” on this page from your iPhone or iPad. TestFlight opens.' },
       { title: 'Install Inhead', text: 'Tap Accept, then Install. Updates arrive through TestFlight as builds are released.' },
     ],
   },
