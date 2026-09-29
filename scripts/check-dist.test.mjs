@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { findViolations, checkRequired, checkJsonLd, checkImgAlt, checkStoreGating, checkRequiredAssets, storeUrlState } from './check-dist.mjs';
+import { findViolations, checkRequired, checkJsonLd, checkImgAlt, checkStoreGating, checkRequiredAssets, storeUrlState, checkBetaLinks, testflightUrl } from './check-dist.mjs';
 
 const page = (content, path = 'index.html') => ({ path, content });
 
@@ -199,4 +199,24 @@ test('storeUrlState', () => {
   assert.equal(storeUrlState('// STORE_URL = null\n/* export const STORE_URL = null; */'), 'unknown');
   assert.equal(storeUrlState(''), 'unknown');
   assert.equal(storeUrlState('export const OTHER = null;'), 'unknown');
+});
+
+const TF = 'https://testflight.apple.com/join/3gehNKa2';
+
+test('beta links: passes when /beta/ links TestFlight and home links /beta/', () => {
+  const files = [
+    page(`<a href="/beta/">Beta</a>`, 'index.html'),
+    page(`<a href="${TF}">Join</a>`, 'beta/index.html'),
+  ];
+  assert.deepEqual(checkBetaLinks(files, TF), []);
+});
+
+test('beta links: reports a missing beta page, a missing TestFlight link and a missing home link', () => {
+  assert.equal(checkBetaLinks([page('<a href="/beta/">x</a>', 'index.html')], TF).length, 1);
+  assert.equal(checkBetaLinks([page('x', 'index.html'), page('no link', 'beta/index.html')], TF).length, 2);
+});
+
+test('testflightUrl reads the constant from config text and ignores comments', () => {
+  assert.equal(testflightUrl(`// export const TESTFLIGHT_URL = 'https://x';\nexport const TESTFLIGHT_URL = '${TF}';`), TF);
+  assert.equal(testflightUrl('export const OTHER = 1;'), null);
 });

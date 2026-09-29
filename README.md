@@ -18,6 +18,7 @@ npm run a11y       # accessibility scan of the built pages
 ## Layout
 
 - `src/pages/` pages; `src/pages/privacy.md` is the privacy policy, served at `/privacy/`
+- `src/pages/beta.astro` the Beta page at `/beta/`; its copy is the `beta` export of `src/data/copy.mjs`, the TestFlight link is `TESTFLIGHT_URL` in `src/config.ts`
 - `src/components/`, `src/layouts/`, `src/styles/` the UI
 - `src/data/copy.mjs` page text; `src/config.ts` site settings
 - `src/assets/screens/` optimised screenshots; `public/` static files (incl. `CNAME`)

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { hero, rows, privacy, cta, footer, disclaimer } from '../src/data/copy.mjs';
+import { hero, rows, privacy, cta, footer, disclaimer, beta, homeBeta } from '../src/data/copy.mjs';
 
 const FORBIDDEN = /\b(diagnos\w*|detect\w*|identif\w*|predict\w*|treat\w*|prevent\w*|reduc\w*|cure\w*)\b/i;
 
@@ -12,7 +12,7 @@ function strings(value, out = []) {
 }
 
 test('landing copy avoids the words the app itself may not use', () => {
-  const all = strings({ hero, rows, privacy, cta, footer });
+  const all = strings({ hero, rows, privacy, cta, footer, beta, homeBeta });
   for (const s of all) assert.doesNotMatch(s, FORBIDDEN, `forbidden word in: ${s}`);
 });
 
@@ -35,11 +35,23 @@ const WORDS = /\b(stars?|rated|reviews?|testimonial|free trial|pro|premium|subsc
 const bad = (s) => MONEY.test(s) || WORDS.test(s);
 
 test('no rating, review or price wording', () => {
-  const all = strings({ hero, rows, privacy, cta, footer, disclaimer }).join(' ');
+  const all = strings({ hero, rows, privacy, cta, footer, disclaimer, beta, homeBeta }).join(' ');
   assert.equal(bad(all), false);
 });
 
 test('the price and rating guards actually match', () => {
   for (const s of ['costs $5', '€9.99 a month', '5-star rated', 'Pro plan', 'subscribe now']) assert.ok(bad(s), s);
   for (const s of ['Private by design', 'Provide a report', 'professional wording']) assert.ok(!bad(s), s);
+});
+
+test('beta copy: three rows in order, three join steps, one call to action', () => {
+  assert.deepEqual(beta.rows.map((r) => r.key), ['what', 'get', 'ask']);
+  for (const r of beta.rows) assert.ok(r.title && r.lead && r.points.length >= 2, r.key);
+  assert.equal(beta.join.steps.length, 3);
+  assert.equal(beta.cta, 'Join the beta on TestFlight');
+  assert.ok(homeBeta.badge && homeBeta.text && homeBeta.link);
+});
+
+test('beta copy states no minimum iOS version', () => {
+  assert.doesNotMatch(strings({ beta, homeBeta }).join(' '), /\biOS\s?\d/);
 });

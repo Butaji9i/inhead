@@ -53,6 +53,72 @@ export const cta = {
   text: 'Inhead is coming to the App Store.',
 };
 
+export const homeBeta = {
+  badge: 'Beta',
+  text: 'Try Inhead on TestFlight before launch',
+  link: 'Or join the beta',
+};
+
+export const beta = {
+  eyebrow: 'Beta',
+  headline: 'Help us build',
+  accent: 'Inhead.',
+  lede: 'Try Inhead on your iPhone or iPad before it reaches the App Store, and help shape it with what you notice.',
+  cta: 'Join the beta on TestFlight',
+  note: 'iPhone and iPad · Through Apple’s TestFlight',
+  rows: [
+    {
+      key: 'what',
+      eyebrow: '1 · What it is',
+      title: 'A beta is a head start.',
+      lead: 'You use a version that is nearly finished, before it is public. It works, but it is not polished yet.',
+      points: [
+        'Delivered through Apple’s TestFlight app',
+        'Runs alongside your other apps like any other',
+        'Ends when Inhead is released on the App Store',
+      ],
+    },
+    {
+      key: 'get',
+      eyebrow: '2 · What you get',
+      title: 'Early access, and a voice.',
+      lead: 'Everything that is in the build today, and every new build as it lands.',
+      points: [
+        'Inhead on iPhone and iPad, ahead of the App Store',
+        'New builds as they are made, through TestFlight',
+        'A say in what gets fixed and what comes next',
+      ],
+    },
+    {
+      key: 'ask',
+      eyebrow: '3 · What we ask',
+      title: 'Use it. Tell us what you find.',
+      lead: 'A few weeks of ordinary use tells us more than any checklist.',
+      points: [
+        'Keep your diary in it for a few weeks',
+        'Tell us what is confusing, missing, or broken',
+        'Expect rough edges — and keep your own copy of anything important',
+      ],
+    },
+  ],
+  join: {
+    eyebrow: 'How to join',
+    title: 'Install TestFlight, then open the invite.',
+    steps: [
+      { title: 'Install TestFlight', text: 'TestFlight is Apple’s own app for trying apps before release. Get it from the App Store.' },
+      { title: 'Open the invite link', text: 'Tap “Join the beta on TestFlight” on this page from your iPhone or iPad. TestFlight opens.' },
+      { title: 'Install Inhead', text: 'Tap Accept, then Install. Updates arrive through TestFlight as builds are released.' },
+    ],
+  },
+  feedback: {
+    title: 'How to send feedback',
+    intro: 'While using the beta, take a screenshot and choose',
+    action: 'Share Beta Feedback',
+    or: ', or write to',
+  },
+  closing: { title: 'Join the beta.', text: 'Two minutes to set up.' },
+};
+
 export const footer = {
   blurb: 'A headache diary for iPhone and iPad.',
 };

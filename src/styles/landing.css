@@ -16,6 +16,18 @@
 .store-btn { background: var(--btn-bg); color: var(--btn-text); }
 .store-soon { border: 2px dashed var(--line); color: var(--text); }
 
+.pill {
+  display: inline-flex; gap: 0.6rem; align-items: center; padding: 0.4rem 0.9rem; margin-bottom: 1.2rem;
+  border-radius: 99px; background: var(--tint); border: 1px solid var(--line); color: var(--text);
+  text-decoration: none; font-size: 0.9rem;
+}
+.pill b {
+  background: var(--btn-bg); color: var(--btn-text); border-radius: 99px; padding: 0.05rem 0.55rem;
+  font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase;
+}
+.pill:hover { border-color: var(--accent); }
+.softlink { display: block; margin-top: 0.9rem; font-size: 0.95rem; }
+
 /* ---------- 3D device group ---------- */
 /* The .dev boxes place the devices; src/scripts/devices3d.ts draws a real 3D model into each. Without 3D
    (no WebGL, a failed load, narrow screens) the screenshots themselves show, as rounded cards. */
@@ -66,7 +78,9 @@
 .row-points { margin: 0.9rem 0 0; padding: 0; list-style: none; color: var(--muted); }
 .row-points li { padding: 0.4rem 0 0.4rem 1.75rem; position: relative; }
 .row-points li::before {
-  content: ''; position: absolute; left: 0; top: 0.95rem; width: 0.9rem; height: 0.9rem; border-radius: 50%;
+  /* `*` in global.css doesn't reach pseudo-elements, so border-box is set here; top centres the ring on the first line of text
+     (li padding 0.4rem + half the 1.7rem line, minus half the ring). */
+  content: ''; box-sizing: border-box; position: absolute; left: 0; top: 0.8rem; width: 0.9rem; height: 0.9rem; border-radius: 50%;
   background: var(--tint); border: 4px solid var(--accent);
 }
 .shot { display: grid; place-items: center; background: var(--band); border-radius: 32px; padding: 2.75rem 0; }
