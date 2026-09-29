@@ -5,7 +5,7 @@ import StoreLabel from '../components/StoreLabel.astro';
 import FeatureRow from '../components/FeatureRow.astro';
 import PrivacyBand from '../components/PrivacyBand.astro';
 import Shot from '../components/Shot.astro';
-import { hero, rows, cta } from '../data/copy.mjs';
+import { hero, rows, cta, homeBeta } from '../data/copy.mjs';
 import allLight from '../assets/screens/iphone-all-light.webp';
 import allDark from '../assets/screens/iphone-all-dark.webp';
 import weekLight from '../assets/screens/iphone-week-light.webp';
@@ -29,6 +29,7 @@ const [record, see, share] = rows;
   <section class="hero" aria-labelledby="hero-title">
     <div class="wrap hero-grid">
       <div>
+        <a class="pill" href="/beta/"><b>{homeBeta.badge}</b> {homeBeta.text} <span aria-hidden="true">→</span></a>
         <h1 id="hero-title">{hero.headline} <span class="accent">{hero.accent}</span></h1>
         <p class="lede">{hero.lede}</p>
         <StoreLabel />
@@ -60,6 +61,7 @@ const [record, see, share] = rows;
         <h2 id="cta-title">{cta.title}</h2>
         <p>{cta.text}</p>
         <StoreLabel />
+        <a class="softlink" href="/beta/">{homeBeta.link} <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>
