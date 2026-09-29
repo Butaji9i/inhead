@@ -7,7 +7,7 @@ import { footer, disclaimer, modelCredits } from '../data/copy.mjs';
     <div class="fcols">
       <div><h2>{SITE_NAME}</h2><p>{footer.blurb}</p></div>
       <div><h2>Support</h2><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></div>
-      <div><h2>Site</h2><a href="/">Home</a><a href="/privacy/">Privacy policy</a></div>
+      <div><h2>Site</h2><a href="/">Home</a><a href="/beta/">Beta</a><a href="/privacy/">Privacy policy</a></div>
     </div>
     <p class="disc">{disclaimer}<br />© {SITE_NAME}</p>
     <p class="credits">3D models:{modelCredits.map((m, i) => <>{i ? ';' : ''} <a href={m.url}>{m.what}</a> by {m.by}</>)}, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</p>

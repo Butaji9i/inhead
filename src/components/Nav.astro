@@ -1,8 +1,9 @@
 ---
-interface Props { current?: 'home' | 'privacy' }
+interface Props { current?: 'home' | 'beta' | 'privacy' }
 const { current } = Astro.props;
 ---
 <nav aria-label="Main">
   <a href="/" aria-current={current === 'home' ? 'page' : undefined}>Home</a>
+  <a href="/beta/" aria-current={current === 'beta' ? 'page' : undefined}>Beta</a>
   <a href="/privacy/" aria-current={current === 'privacy' ? 'page' : undefined}>Privacy</a>
 </nav>
