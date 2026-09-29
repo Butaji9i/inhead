@@ -78,7 +78,9 @@
 .row-points { margin: 0.9rem 0 0; padding: 0; list-style: none; color: var(--muted); }
 .row-points li { padding: 0.4rem 0 0.4rem 1.75rem; position: relative; }
 .row-points li::before {
-  content: ''; position: absolute; left: 0; top: 0.95rem; width: 0.9rem; height: 0.9rem; border-radius: 50%;
+  /* `*` in global.css doesn't reach pseudo-elements, so border-box is set here; top centres the ring on the first line of text
+     (li padding 0.4rem + half the 1.7rem line, minus half the ring). */
+  content: ''; box-sizing: border-box; position: absolute; left: 0; top: 0.8rem; width: 0.9rem; height: 0.9rem; border-radius: 50%;
   background: var(--tint); border: 4px solid var(--accent);
 }
 .shot { display: grid; place-items: center; background: var(--band); border-radius: 32px; padding: 2.75rem 0; }
