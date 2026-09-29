@@ -9,3 +9,5 @@ export const CONTACT_EMAIL = 'support@inhead.app';
 export const STORE_URL: string | null = null;
 // numeric App Store id, set together with STORE_URL when the app is live
 export const APP_STORE_ID: string | null = null;
+// TestFlight public invite link for the beta; used by the Beta page and checked by scripts/check-dist.mjs.
+export const TESTFLIGHT_URL = 'https://testflight.apple.com/join/3gehNKa2';
