@@ -106,13 +106,13 @@ export const beta = {
     title: 'Install TestFlight, then open the invite.',
     steps: [
       { title: 'Install TestFlight', text: 'TestFlight is Apple’s own app for trying apps before release. Get it from the App Store.' },
-      { title: 'Open the invite link', text: 'Tap “Join the beta” on this page from your iPhone or iPad. TestFlight opens.' },
+      { title: 'Open the invite link', text: 'Tap “Join the beta on TestFlight” on this page from your iPhone or iPad. TestFlight opens.' },
       { title: 'Install Inhead', text: 'Tap Accept, then Install. Updates arrive through TestFlight as builds are released.' },
     ],
   },
   feedback: {
     title: 'How to send feedback',
-    intro: 'In TestFlight, take a screenshot in Inhead and choose',
+    intro: 'While using the beta, take a screenshot and choose',
     action: 'Share Beta Feedback',
     or: ', or write to',
   },
