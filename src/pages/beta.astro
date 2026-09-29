@@ -1,0 +1,76 @@
+---
+import Base from '../layouts/Base.astro';
+import FeatureRow from '../components/FeatureRow.astro';
+import Shot from '../components/Shot.astro';
+import { beta } from '../data/copy.mjs';
+import { TESTFLIGHT_URL, CONTACT_EMAIL } from '../config';
+import allLight from '../assets/screens/iphone-all-light.webp';
+import allDark from '../assets/screens/iphone-all-dark.webp';
+import weekLight from '../assets/screens/iphone-week-light.webp';
+import weekDark from '../assets/screens/iphone-week-dark.webp';
+import doctorLight from '../assets/screens/iphone-data-doctor-light.webp';
+import doctorDark from '../assets/screens/iphone-data-doctor-dark.webp';
+import '../styles/landing.css';
+import '../styles/beta.css';
+
+const [what, get, ask] = beta.rows;
+---
+<Base
+  title="Beta — try Inhead before launch"
+  description="Join the Inhead beta on TestFlight: what a beta is, what testers get, what we ask, how to join and how to send feedback."
+>
+  <section class="beta-hero" aria-labelledby="beta-title">
+    <div class="wrap">
+      <img class="beta-icon" src="/icon-192.png" alt="" width="72" height="72" />
+      <p class="eyebrow">{beta.eyebrow}</p>
+      <h1 id="beta-title">{beta.headline} <span class="accent">{beta.accent}</span></h1>
+      <p class="lede">{beta.lede}</p>
+      <a class="btn" href={TESTFLIGHT_URL}>{beta.cta}</a>
+      <p class="note">{beta.note}</p>
+    </div>
+  </section>
+
+  <div class="wrap rows">
+    <FeatureRow {...what}>
+      <div class="crop crop-record"><Shot light={allLight} dark={allDark} width={660}
+        alt="Inhead's Timeline screen: a week strip, an Ongoing section with Menstruation and Poor Sleep, and pain entries of 3/10, 8/10 and 4/10 at 09:00, 12:00 and 15:00" /></div>
+    </FeatureRow>
+    <FeatureRow {...get} flip>
+      <div class="crop crop-see"><Shot light={weekLight} dark={weekDark} width={660}
+        alt="Inhead's Episodes screen: a strip of days with headache days drawn as colour blobs, and below it an episode card with its pain curve" /></div>
+    </FeatureRow>
+    <FeatureRow {...ask}>
+      <div class="crop crop-share"><Shot light={doctorLight} dark={doctorDark} width={660}
+        alt="Inhead's Data screen: a For your doctor card above a Your year grid of small squares, darker red for higher pain" /></div>
+    </FeatureRow>
+  </div>
+
+  <section class="join" aria-labelledby="join-title">
+    <div class="wrap">
+      <p class="eyebrow">{beta.join.eyebrow}</p>
+      <h2 id="join-title">{beta.join.title}</h2>
+      <ol class="steps">
+        {beta.join.steps.map((s) => (
+          <li class="step"><h3>{s.title}</h3><p>{s.text}</p></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="feedback" aria-labelledby="feedback-title">
+    <div class="wrap">
+      <h2 id="feedback-title">{beta.feedback.title}</h2>
+      <p>{beta.feedback.intro} <strong>{beta.feedback.action}</strong>{beta.feedback.or} <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+    </div>
+  </section>
+
+  <section class="cta" aria-labelledby="beta-cta-title">
+    <div class="wrap">
+      <div class="panel">
+        <h2 id="beta-cta-title">{beta.closing.title}</h2>
+        <p>{beta.closing.text}</p>
+        <a class="btn" href={TESTFLIGHT_URL}>{beta.cta}</a>
+      </div>
+    </div>
+  </section>
+</Base>
