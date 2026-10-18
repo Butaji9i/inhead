@@ -6,7 +6,7 @@ description: How Inhead handles your data. It keeps your headache diary on your 
 
 # Privacy Policy — Inhead
 
-**Last updated: 6 October 2026**
+**Last updated: 19 October 2026**
 
 Inhead keeps your headache diary on your own device, and in your own iCloud
 only if you turn that on. It has no server of its own and no account with us.
@@ -30,8 +30,8 @@ and calculate; neither collects anything and neither talks to a network. Nothing
 you record is used to build a profile of you or shared with any third party.
 
 The only data that ever leaves the app by your hand is the doctor's report you
-choose to export: it is handed to the iOS share sheet, and where it goes from
-there is your choice. Deleting the app removes it and its local database from
+choose to export and any feedback mail you choose to send. The report is
+handed to the iOS share sheet, and where it goes from there is your choice. Deleting the app removes it and its local database from
 that device; the copy in your iCloud is yours to manage, in the iOS Settings
 app under your Apple Account. If Inhead ever cannot open your diary and you
 choose **Start over**, the old diary is kept on the device, set aside, until you
@@ -43,4 +43,8 @@ built-in treatments in advance, so Siri can recognise them; the name of a
 treatment you added yourself reaches Siri only when you say it or choose it.
 What you log is saved on your device.
 
-If you have a question about this policy, write to support@inhead.app.
+If you have a question about this policy, write to support@inhead.app. The
+*Feedback & Questions* row in Settings opens your own mail app with a message
+to that address, prefilled with the app's version and your iOS version so we
+can answer; you can edit or delete those lines, and nothing is sent unless you
+send it. We receive only what you send.
