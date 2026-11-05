@@ -9,7 +9,7 @@ const fm = Astro.props.frontmatter ?? {};
 const title: string = fm.title ?? Astro.props.title ?? SITE_NAME;
 const description: string = fm.description ?? Astro.props.description ?? '';
 const path = Astro.url.pathname;
-const current = path === '/' ? 'home' : path.startsWith('/beta') ? 'beta' : path.startsWith('/privacy') ? 'privacy' : undefined;
+const current = path === '/' ? 'home' : path.startsWith('/privacy') ? 'privacy' : undefined;
 ---
 <!doctype html>
 <html lang="en">
