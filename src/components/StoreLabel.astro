@@ -2,5 +2,5 @@
 import { STORE_URL } from '../config';
 ---
 {STORE_URL
-  ? <a class="store-btn" href={STORE_URL}>Download on the App Store</a>
+  ? <a class="store-badge" href={STORE_URL}><img src="/app-store-badge.svg" alt="Download on the App Store" width="162" height="54" /></a>
   : <span class="store-soon">Coming soon to the App Store</span>}
