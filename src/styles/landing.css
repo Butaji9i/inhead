@@ -91,6 +91,7 @@
 .crop img { display: block; width: 100%; height: auto; -webkit-user-drag: none; }
 .crop-record { aspect-ratio: 330 / 620; }
 .crop-see { aspect-ratio: 330 / 390; }
+.crop-see-tall { aspect-ratio: 330 / 450; }
 .crop-share { aspect-ratio: 1; }
 .crop-share img { margin-top: -72.7%; }
 

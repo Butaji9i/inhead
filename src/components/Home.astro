@@ -42,7 +42,9 @@ const doctor = screen(lang, 'iphone-data-doctor');
       <div class="crop crop-record"><Shot light={all.light} dark={all.dark} width={660} alt={shots.record} /></div>
     </FeatureRow>
     <FeatureRow {...see} flip>
-      <div class="crop crop-see"><Shot light={week.light} dark={week.dark} width={660} alt={shots.see} /></div>
+      {/* The translated week screens are from Inhead 1.1.0, which puts a "Did it stop you doing things?" card
+          above the episode card; the taller crop keeps the episode's pain curve in view. */}
+      <div class:list={['crop', 'crop-see', { 'crop-see-tall': week.own }]}><Shot light={week.light} dark={week.dark} width={660} alt={shots.see} /></div>
     </FeatureRow>
     <FeatureRow {...share}>
       <div class="crop crop-share"><Shot light={doctor.light} dark={doctor.dark} width={660} alt={shots.share} /></div>
