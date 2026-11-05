@@ -10,11 +10,14 @@
 .hero .lede { font-size: 1.25rem; color: var(--muted); margin: 0 0 1.6rem; max-width: 26em; }
 .hero .note { font-size: 0.875rem; color: var(--muted); margin: 0.9rem 0 0; }
 
-.store-btn, .store-soon {
+.store-soon {
   display: inline-block; padding: 0.95rem 1.75rem; border-radius: 14px; font-weight: 600; text-decoration: none;
+  border: 2px dashed var(--line); color: var(--text);
 }
-.store-btn { background: var(--btn-bg); color: var(--btn-text); }
-.store-soon { border: 2px dashed var(--line); color: var(--text); }
+/* Apple's official badge (public/app-store-badge.svg, from developer.apple.com): shown as is, at least 40px tall.
+   The black badge carries its own grey outline, so it reads on the dark theme too. */
+.store-badge { display: inline-block; line-height: 0; border-radius: 9px; }
+.store-badge img { display: block; height: 54px; width: auto; }
 
 .pill {
   display: inline-flex; gap: 0.6rem; align-items: center; padding: 0.4rem 0.9rem; margin-bottom: 1.2rem;
