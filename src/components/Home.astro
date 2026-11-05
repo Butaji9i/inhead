@@ -18,6 +18,10 @@ const [record, see, share] = rows;
 const all = screen(lang, 'iphone-all');
 const week = screen(lang, 'iphone-week');
 const doctor = screen(lang, 'iphone-data-doctor');
+// How far down the data screen the square crop starts, as a share of the screenshot's width, so it opens on the
+// "For your doctor" card: the English capture has the card at about 980 px of 1320, the translated 1.1.0 captures
+// (scrolled further, to put the card at 150 pt) at about 450 px.
+const shareShift = doctor.own ? 26 : 72.7;
 ---
 <Base title={t.homeTitle} description={t.homeDescription}>
   <script is:inline slot="head">
@@ -47,7 +51,7 @@ const doctor = screen(lang, 'iphone-data-doctor');
       <div class:list={['crop', 'crop-see', { 'crop-see-tall': week.own }]}><Shot light={week.light} dark={week.dark} width={660} alt={shots.see} /></div>
     </FeatureRow>
     <FeatureRow {...share}>
-      <div class="crop crop-share"><Shot light={doctor.light} dark={doctor.dark} width={660} alt={shots.share} /></div>
+      <div class="crop crop-share" style={`--share-shift: -${shareShift}%`}><Shot light={doctor.light} dark={doctor.dark} width={660} alt={shots.share} /></div>
     </FeatureRow>
   </div>
 
