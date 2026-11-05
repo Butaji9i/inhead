@@ -23,7 +23,7 @@ export const rows = [
     title: 'See what it adds up to.',
     lead: 'Your days at a glance: headache days, medication days, and the days you recorded nothing.',
     points: [
-      'Which ICHD-3 criteria your own records meet, with the criteria written out so you can see why',
+      'Your records counted against the ICHD-3 thresholds, with the criteria cited so you can see why',
       'Acute medication days per month, counted by ICHD-3’s definition',
       'How your records change over time, drawn from what you entered and nothing else',
     ],
