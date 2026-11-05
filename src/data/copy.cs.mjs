@@ -1,10 +1,12 @@
 // Czech page text. Mirrors src/data/copy.mjs field for field (scripts/copy.test.mjs checks the shape).
 // Terms follow the app's own Czech (headacher-ios Localizable.xcstrings and
 // docs/czech-terminology-research.md): formal «vy», ICHD-3, no «diagnóza» even when negated.
+// Where the site says what the App Store listing says, it uses the listing's approved wording (headacher-ios,
+// docs/app-store-listing.md, "1.1.0 — What's New and the Czech and Russian listing").
 export const hero = {
   headline: 'Váš deník bolestí hlavy.',
   accent: 'Přehledně uspořádaný.',
-  lede: 'Zapisujte, co se stalo — kdy bolest začala, jak byla silná, co jste si vzali — a uvidíte, co vaše vlastní záznamy dávají dohromady.',
+  lede: 'Zapište, co se stalo — kdy bolest začala, jak silná byla a co jste si vzali — a uvidíte, co vaše vlastní záznamy ukazují.',
   note: 'iPhone a iPad · Bez účtu · Nic se nesleduje',
 };
 
@@ -17,25 +19,25 @@ export const rows = [
     points: [
       'Příznaky, které ji provázely — nevolnost, citlivost na světlo a zvuk, aura a další',
       'Léky, které jste si vzali, a kdy',
-      'Faktory, které se rozhodnete sledovat: spánek, menstruace, počasí — cokoli, na co chcete mít oko',
+      'Faktory, které chcete sledovat: spánek, menstruace, počasí — cokoli, na co chcete dát pozor',
     ],
   },
   {
     key: 'see',
     eyebrow: '2 · Prohlížejte',
-    title: 'Podívejte se, co to dává dohromady.',
+    title: 'Podívejte se, co z toho vychází.',
     lead: 'Vaše dny na první pohled: dny s bolestí hlavy, dny s lékem a dny, kdy jste nic nezapsali.',
     points: [
-      'Vaše záznamy sečtené podle prahů ICHD-3, s odkazem na kritéria, abyste viděli, odkud čísla pocházejí',
+      'Vaše záznamy porovnané s prahy ICHD-3, s citovanými kritérii, abyste viděli proč',
       'Dny s akutním lékem za měsíc, počítané podle definice ICHD-3',
-      'Jak se vaše záznamy mění v čase — jen z toho, co jste sami zadali',
+      'Jak se vaše záznamy mění v čase, sestavené jen z toho, co jste zadali',
     ],
   },
   {
     key: 'share',
     eyebrow: '3 · Sdílejte',
     title: 'Vezměte to k lékaři.',
-    lead: 'Exportujte zprávu, kterou můžete předat, s čísly i definicemi, na kterých stojí.',
+    lead: 'Exportujte zprávu, kterou můžete předat, s čísly i definicemi, ze kterých vycházejí.',
     points: ['Každé číslo má svou definici', 'Zpráva jde jen tam, kam ji sami pošlete'],
   },
 ];
