@@ -6,7 +6,7 @@ description: How Inhead handles your data. It keeps your headache diary on your 
 
 # Privacy Policy — Inhead
 
-**Last updated: 19 October 2026**
+**Last updated: 5 November 2026**
 
 Inhead keeps your headache diary on your own device, and in your own iCloud
 only if you turn that on. It has no server of its own and no account with us.
