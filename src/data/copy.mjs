@@ -50,9 +50,10 @@ export const privacy = {
 
 export const cta = {
   title: 'Start your headache diary.',
-  text: 'Inhead is coming to the App Store.',
+  text: 'Inhead is on the App Store, for iPhone and iPad.',
 };
 
+// The beta pill and link, for when the Beta page is back (see "Beta page" in README.md).
 export const homeBeta = {
   badge: 'Beta',
   text: 'Try Inhead on TestFlight before launch',

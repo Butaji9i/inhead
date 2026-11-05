@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { findViolations, checkRequired, checkJsonLd, checkImgAlt, checkStoreGating, checkRequiredAssets, storeUrlState, checkBetaLinks, testflightUrl } from './check-dist.mjs';
+import { findViolations, checkRequired, checkJsonLd, checkImgAlt, checkStoreGating, checkRequiredAssets, storeUrlState, checkStoreLinks, configString } from './check-dist.mjs';
 
 const page = (content, path = 'index.html') => ({ path, content });
 
@@ -201,22 +201,24 @@ test('storeUrlState', () => {
   assert.equal(storeUrlState('export const OTHER = null;'), 'unknown');
 });
 
-const TF = 'https://testflight.apple.com/join/3gehNKa2';
+const STORE = 'https://apps.apple.com/us/app/inhead/id6814018609';
 
-test('beta links: passes when /beta/ links TestFlight and home links /beta/', () => {
+test('store links: passes when home links the App Store and nothing links /beta/', () => {
   const files = [
-    page(`<a href="/beta/">Beta</a>`, 'index.html'),
-    page(`<a href="${TF}">Join</a>`, 'beta/index.html'),
+    page(`<a href="${STORE}">Download</a>`, 'index.html'),
+    page('<meta http-equiv="refresh" content="0;url=/"><a href="/">/</a>', 'beta/index.html'),
+    page('<a href="/">Home</a>', 'privacy/index.html'),
   ];
-  assert.deepEqual(checkBetaLinks(files, TF), []);
+  assert.deepEqual(checkStoreLinks(files, STORE), []);
 });
 
-test('beta links: reports a missing beta page, a missing TestFlight link and a missing home link', () => {
-  assert.equal(checkBetaLinks([page('<a href="/beta/">x</a>', 'index.html')], TF).length, 1);
-  assert.equal(checkBetaLinks([page('x', 'index.html'), page('no link', 'beta/index.html')], TF).length, 2);
+test('store links: reports a home page without the store link, and pages linking the parked /beta/', () => {
+  assert.equal(checkStoreLinks([page('<a href="/beta/">Beta</a>', 'index.html')], STORE).length, 2);
+  assert.equal(checkStoreLinks([page(`<a href="${STORE}">x</a>`, 'index.html'), page('<a href="/beta/">x</a>', 'privacy/index.html')], STORE).length, 1);
 });
 
-test('testflightUrl reads the constant from config text and ignores comments', () => {
-  assert.equal(testflightUrl(`// export const TESTFLIGHT_URL = 'https://x';\nexport const TESTFLIGHT_URL = '${TF}';`), TF);
-  assert.equal(testflightUrl('export const OTHER = 1;'), null);
+test('configString reads a string constant from config text and ignores comments', () => {
+  assert.equal(configString(`// export const STORE_URL = 'https://x';\nexport const STORE_URL: string | null = '${STORE}';`, 'STORE_URL'), STORE);
+  assert.equal(configString('export const STORE_URL: string | null = null;', 'STORE_URL'), null);
+  assert.equal(configString('export const OTHER = 1;', 'STORE_URL'), null);
 });

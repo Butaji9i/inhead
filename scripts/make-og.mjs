@@ -12,7 +12,7 @@ h1 span{color:#0062cc}
 p{position:absolute;left:80px;top:470px;margin:0;font-weight:500;font-size:26px;color:#5b5b60;width:520px}
 .phone{position:absolute;left:760px;top:60px;width:300px;height:640px;border-radius:50px;border:11px solid #16181a;overflow:hidden;box-shadow:0 40px 80px -30px rgba(0,60,160,.5)}
 .phone img{width:100%;height:100%;object-fit:cover;object-position:top}
-</style><img class="icon" src="data:image/png;base64,${icon}"><h1>Your headache diary. <span>Kept in order.</span></h1><p>Coming soon to the App Store</p>
+</style><img class="icon" src="data:image/png;base64,${icon}"><h1>Your headache diary. <span>Kept in order.</span></h1><p>Now on the App Store</p>
 <div class="phone"><img src="data:image/webp;base64,${phone}"></div>`;
 
 const browser = await chromium.launch();

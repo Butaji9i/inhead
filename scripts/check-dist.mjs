@@ -122,19 +122,20 @@ export function checkRequiredAssets(paths) {
   return REQUIRED_ASSETS.filter((p) => !normalized.includes(p)).map((p) => `missing ${p}`);
 }
 
-export function checkBetaLinks(files, tfUrl) {
+export function checkStoreLinks(files, storeUrl) {
   const out = [];
-  const beta = files.find((f) => f.path === 'beta/index.html');
-  if (!beta) out.push('missing beta/index.html');
-  else if (!beta.content.includes(tfUrl)) out.push(`beta/index.html: does not link to ${tfUrl}`);
   const home = files.find((f) => f.path === 'index.html');
-  if (!home || !home.content.includes('href="/beta/"')) out.push('index.html: does not link to /beta/');
+  if (!home || !home.content.includes(`href="${storeUrl}"`)) out.push(`index.html: does not link to ${storeUrl}`);
+  // The Beta page is parked: /beta/ only redirects home, so no page should send readers there.
+  for (const { path, content } of files) {
+    if (isHtml(path) && path !== 'beta/index.html' && content.includes('href="/beta/"')) out.push(`${path}: links to the parked /beta/ page`);
+  }
   return out;
 }
 
-export function testflightUrl(configText) {
+export function configString(configText, name) {
   const text = String(configText ?? '').replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\s)\/\/.*$/gm, '$1');
-  const m = /export\s+const\s+TESTFLIGHT_URL\b[^=\n]*=\s*(?:'([^']*)'|"([^"]*)")/.exec(text);
+  const m = new RegExp(`export\\s+const\\s+${name}\\b[^=\\n]*=\\s*(?:'([^']*)'|"([^"]*)")`).exec(text);
   return m ? (m[1] ?? m[2]) : null;
 }
 
@@ -165,9 +166,9 @@ function main() {
   try {
     state = storeUrlState(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/config.ts'), 'utf8'));
   } catch {}
-  let tfUrl = null;
+  let storeUrl = null;
   try {
-    tfUrl = testflightUrl(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/config.ts'), 'utf8'));
+    storeUrl = configString(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/config.ts'), 'utf8'), 'STORE_URL');
   } catch {}
   const problems = [
     ...checkRequired(paths, cname),
@@ -178,7 +179,7 @@ function main() {
     ...(state === 'unknown'
       ? ['cannot determine STORE_URL from src/config.ts, so the store-markup gate cannot run']
       : checkStoreGating(files, state === 'null')),
-    ...(tfUrl ? checkBetaLinks(files, tfUrl) : ['cannot determine TESTFLIGHT_URL from src/config.ts, so the beta link check cannot run']),
+    ...(state === 'null' ? [] : storeUrl ? checkStoreLinks(files, storeUrl) : ['cannot determine STORE_URL from src/config.ts, so the store link check cannot run']),
   ];
   if (problems.length) {
     console.error(problems.join('\n'));
