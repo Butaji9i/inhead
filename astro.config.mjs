@@ -6,5 +6,7 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'always',
   build: { format: 'directory' },
+  // The Beta page is parked (src/pages/_beta.astro); old links to it land on the home page.
+  redirects: { '/beta': '/' },
   integrations: [sitemap()],
 });
