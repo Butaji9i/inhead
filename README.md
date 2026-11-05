@@ -18,13 +18,32 @@ npm run a11y       # accessibility scan of the built pages
 ## Layout
 
 - `src/pages/` pages; `src/pages/privacy.md` is the privacy policy, served at `/privacy/`
+- `src/components/Home.astro` the home page, rendered in each language by `src/pages/index.astro`,
+  `src/pages/ru/index.astro` and `src/pages/cs/index.astro`
 - `src/pages/_beta.astro` the parked Beta page (see below)
 - `src/components/`, `src/layouts/`, `src/styles/` the UI
 - `src/data/copy.mjs` page text; `src/config.ts` site settings, incl. the App Store link `STORE_URL`
-- `src/assets/screens/` optimised screenshots; `public/` static files (incl. `CNAME`)
+- `src/assets/screens/` optimised screenshots, `src/assets/screens/<lang>/` the app in that language
+  (a screen missing there falls back to the English one, `src/lib/screens.ts`); `public/` static files (incl. `CNAME`)
 - `public/models/` the hero's 3D iPhone and iPad, built from the Sketchfab downloads by
   `node scripts/make-models.mjs <iphone_17_pro.glb> <ipad_pro13in_black_m4.glb>`; drawn by `src/scripts/devices3d.ts`
 - `scripts/` build checks, tests and the accessibility scan
+
+## Languages
+
+English at the root, Russian under `/ru/`, Czech under `/cs/` (`src/i18n.mjs`). Each language has:
+
+- its page copy in `src/data/copy.mjs`, `copy.ru.mjs`, `copy.cs.mjs`, field for field, and the words
+  around it (navigation, footer, titles) in `ui` in `src/i18n.mjs`;
+- its privacy policy: `src/pages/privacy.md`, `src/pages/ru/privacy.md`, `src/pages/cs/privacy.md`.
+  **When the English policy changes, change the translations with it.** `scripts/i18n.test.mjs`
+  fails while their *Last updated* dates differ;
+- its link-preview card: `public/og.png`, `og-ru.png`, `og-cs.png` (`node scripts/make-og.mjs`);
+- its App Store link, in its storefront (`/us/`, `/ru/`, `/cz/`; `storeUrlFor` in `src/i18n.mjs`).
+
+The Russian and Czech terms follow the app's own translations (headacher-ios `Localizable.xcstrings`,
+`docs/russian-terminology-research.md`, `docs/czech-terminology-research.md`), and `scripts/i18n.test.mjs`
+keeps the copy clear of the words the app may not use, in each language.
 
 ## Beta page
 

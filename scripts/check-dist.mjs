@@ -30,9 +30,14 @@ export function findViolations(files, extraForbidden = []) {
   return out;
 }
 
+// Every page in every language: '' is English at the root.
+export const LANG_PREFIXES = ['', 'ru/', 'cs/'];
+
 export function checkRequired(paths, cname) {
   const out = [];
-  if (!paths.includes('privacy/index.html')) out.push('missing privacy/index.html');
+  for (const p of LANG_PREFIXES) {
+    for (const page of [`${p}index.html`, `${p}privacy/index.html`]) if (!paths.includes(page)) out.push(`missing ${page}`);
+  }
   if (cname === null) out.push('missing CNAME');
   else if (cname.trim() !== 'inhead.app') out.push('CNAME must contain exactly inhead.app');
   return out;
@@ -112,7 +117,7 @@ export function checkStoreGating(files, storeIsNull) {
   return out;
 }
 
-const REQUIRED_ASSETS = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'icon-512.png', 'icon-32.png', 'icon-192.png'];
+const REQUIRED_ASSETS = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'og-ru.png', 'og-cs.png', 'icon-512.png', 'icon-32.png', 'icon-192.png'];
 export function checkRequiredAssets(paths) {
   const normalized = paths.map((p) => {
     let normalized = p.replace(/\\/g, '/');
@@ -122,13 +127,33 @@ export function checkRequiredAssets(paths) {
   return REQUIRED_ASSETS.filter((p) => !normalized.includes(p)).map((p) => `missing ${p}`);
 }
 
+// Each home page links the App Store in its readers' storefront (storeUrlFor in src/i18n.mjs).
+const STOREFRONTS = { '': 'us', 'ru/': 'ru', 'cs/': 'cz' };
+
 export function checkStoreLinks(files, storeUrl) {
   const out = [];
-  const home = files.find((f) => f.path === 'index.html');
-  if (!home || !home.content.includes(`href="${storeUrl}"`)) out.push(`index.html: does not link to ${storeUrl}`);
+  for (const [prefix, front] of Object.entries(STOREFRONTS)) {
+    const url = storeUrl.replace('/us/', `/${front}/`);
+    const home = files.find((f) => f.path === `${prefix}index.html`);
+    if (!home || !home.content.includes(`href="${url}"`)) out.push(`${prefix}index.html: does not link to ${url}`);
+  }
   // The Beta page is parked: /beta/ only redirects home, so no page should send readers there.
   for (const { path, content } of files) {
     if (isHtml(path) && path !== 'beta/index.html' && content.includes('href="/beta/"')) out.push(`${path}: links to the parked /beta/ page`);
+  }
+  return out;
+}
+
+// Each page declares its own language, and links its versions in the other two.
+export function checkLanguages(files) {
+  const out = [];
+  for (const { path, content } of files) {
+    if (!isHtml(path) || path === 'beta/index.html') continue;
+    const lang = path.startsWith('ru/') ? 'ru' : path.startsWith('cs/') ? 'cs' : 'en';
+    if (!new RegExp(`<html[^>]*\\blang="${lang}"`).test(content)) out.push(`${path}: <html> does not say lang="${lang}"`);
+    for (const l of ['en', 'ru', 'cs', 'x-default']) {
+      if (!new RegExp(`<link[^>]*rel="alternate"[^>]*hreflang="${l}"`).test(content)) out.push(`${path}: no hreflang="${l}" alternate`);
+    }
   }
   return out;
 }
@@ -176,6 +201,7 @@ function main() {
     ...findViolations(files, extras),
     ...checkJsonLd(files),
     ...checkImgAlt(files),
+    ...checkLanguages(files),
     ...(state === 'unknown'
       ? ['cannot determine STORE_URL from src/config.ts, so the store-markup gate cannot run']
       : checkStoreGating(files, state === 'null')),

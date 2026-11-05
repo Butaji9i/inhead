@@ -120,6 +120,16 @@ export const beta = {
   closing: { title: 'Join the beta.', text: 'Two minutes to set up.' },
 };
 
+// Alt text for the screenshots, which show the app in the page's language.
+export const shots = {
+  group: 'Screens from the Inhead app',
+  ipad: 'Inhead on iPad: an episode’s detail, with its pain curve, the changes in pain through the day, and the pattern you named for it',
+  iphone: 'Inhead on iPhone: the month view, with headache days drawn as soft colour blobs and the day’s episodes listed below',
+  record: 'Inhead’s Timeline screen: a week strip, an Ongoing section with Menstruation and Poor Sleep, and pain entries of 3/10, 8/10 and 4/10 at 09:00, 12:00 and 15:00',
+  see: 'Inhead’s Episodes screen: a strip of days with headache days drawn as colour blobs, and below it an episode card with its pain curve',
+  share: 'Inhead’s Data screen: a For your doctor card above a Your year grid of small squares, darker red for higher pain',
+};
+
 export const footer = {
   blurb: 'A headache diary for iPhone and iPad.',
 };

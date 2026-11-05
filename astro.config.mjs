@@ -8,5 +8,6 @@ export default defineConfig({
   build: { format: 'directory' },
   // The Beta page is parked (src/pages/_beta.astro); old links to it land on the home page.
   redirects: { '/beta': '/' },
-  integrations: [sitemap()],
+  // hreflang alternates for every page in English, Russian and Czech (the languages are in src/i18n.mjs).
+  integrations: [sitemap({ i18n: { defaultLocale: 'en', locales: { en: 'en', ru: 'ru', cs: 'cs' } } })],
 });

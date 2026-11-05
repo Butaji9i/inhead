@@ -1,8 +1,18 @@
 ---
-interface Props { current?: 'home' | 'privacy' }
-const { current } = Astro.props;
+import { ui, localePath, LANGS, LANG_META } from '../i18n.mjs';
+
+interface Props { lang: string; base: string }
+const { lang, base } = Astro.props;
+const t = ui[lang];
+const current = base === '/' ? 'home' : base.startsWith('/privacy') ? 'privacy' : undefined;
 ---
-<nav aria-label="Main">
-  <a href="/" aria-current={current === 'home' ? 'page' : undefined}>Home</a>
-  <a href="/privacy/" aria-current={current === 'privacy' ? 'page' : undefined}>Privacy</a>
+<nav aria-label={t.navLabel}>
+  <a href={localePath(lang, '/')} aria-current={current === 'home' ? 'page' : undefined}>{t.home}</a>
+  <a href={localePath(lang, '/privacy/')} aria-current={current === 'privacy' ? 'page' : undefined}>{t.privacy}</a>
 </nav>
+<ul class="langs" aria-label={t.language}>
+  {LANGS.map((l) => (
+    <li><a href={localePath(l, base)} lang={l} hreflang={l} aria-label={`${LANG_META[l].short} — ${LANG_META[l].name}`}
+      aria-current={l === lang ? 'true' : undefined}>{LANG_META[l].short}</a></li>
+  ))}
+</ul>

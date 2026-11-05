@@ -1,6 +1,13 @@
 ---
 import { STORE_URL } from '../config';
+import { storeUrlFor, ui } from '../i18n.mjs';
+
+interface Props { lang?: string }
+const { lang = 'en' } = Astro.props;
+const href = storeUrlFor(STORE_URL, lang);
 ---
-{STORE_URL
-  ? <a class="store-badge" href={STORE_URL}><img src="/app-store-badge.svg" alt="Download on the App Store" width="162" height="54" /></a>
-  : <span class="store-soon">Coming soon to the App Store</span>}
+{/* Apple's English badge in every language (the localized ones are not in the repo yet), so its alt text,
+    which voice control users say aloud, stays the English it shows. */}
+{href
+  ? <a class="store-badge" href={href}><img src="/app-store-badge.svg" alt="Download on the App Store" lang="en" width="162" height="54" /></a>
+  : <span class="store-soon">{ui[lang].comingSoon}</span>}

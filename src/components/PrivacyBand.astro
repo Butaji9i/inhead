@@ -1,5 +1,8 @@
 ---
-import { privacy } from '../data/copy.mjs';
+import { copyFor } from '../i18n.mjs';
+
+interface Props { lang: string }
+const { privacy } = copyFor(Astro.props.lang);
 
 const icons: Record<string, string> = {
   account: '<circle cx="12" cy="8" r="3.5"/><path d="M5 20c1-4 4-5.5 7-5.5s6 1.5 7 5.5"/><path d="M4 4l16 16"/>',
