@@ -4,28 +4,29 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import Seo from '../components/Seo.astro';
 import { SITE_NAME } from '../config';
+import { langFromPath, basePath, localePath, ui } from '../i18n.mjs';
 
 const fm = Astro.props.frontmatter ?? {};
 const title: string = fm.title ?? Astro.props.title ?? SITE_NAME;
 const description: string = fm.description ?? Astro.props.description ?? '';
-const path = Astro.url.pathname;
-const current = path === '/' ? 'home' : path.startsWith('/privacy') ? 'privacy' : undefined;
+const lang = langFromPath(Astro.url.pathname);
+const base = basePath(Astro.url.pathname);
 ---
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <Seo title={title} description={description} />
     <slot name="head" />
   </head>
   <body>
-    <a class="skip" href="#main">Skip to content</a>
+    <a class="skip" href="#main">{ui[lang].skip}</a>
     <header class="site">
       <div class="wrap">
-        <a class="wordmark" href="/">{SITE_NAME}</a>
-        <Nav current={current} />
+        <a class="wordmark" href={localePath(lang, '/')}>{SITE_NAME}</a>
+        <div class="nav-group"><Nav lang={lang} base={base} /></div>
       </div>
     </header>
     <main id="main" tabindex="-1"><slot /></main>
-    <Footer />
+    <Footer lang={lang} base={base} />
   </body>
 </html>

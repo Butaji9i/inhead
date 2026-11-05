@@ -1,30 +1,36 @@
-export function buildJsonLd({ siteUrl, path, name, description, pageTitle, contactEmail, storeUrl }) {
-  const home = `${siteUrl}/`;
+// `path` is the page's path without its language prefix ('/', '/privacy/'); `homeUrl` is the home page in the
+// page's language. The Organization, WebSite and app are one entity each, whichever language describes them.
+export function buildJsonLd({
+  siteUrl, path, name, description, pageTitle, contactEmail, storeUrl,
+  lang = 'en', homeUrl = `${siteUrl}/`, homeName = 'Home', crumbName, languages = ['en', 'ru', 'cs'],
+}) {
+  const root = `${siteUrl}/`;
   const graph = [];
   if (path === '/') {
     const org = {
       '@type': 'Organization',
-      '@id': `${home}#organization`,
+      '@id': `${root}#organization`,
       name,
-      url: home,
+      url: root,
       logo: `${siteUrl}/icon-512.png`,
       contactPoint: { '@type': 'ContactPoint', contactType: 'customer support', email: contactEmail },
     };
     graph.push(org, {
       '@type': 'WebSite',
-      '@id': `${home}#website`,
-      url: home,
+      '@id': `${root}#website`,
+      url: root,
       name,
-      inLanguage: 'en',
+      inLanguage: languages,
       publisher: { '@id': org['@id'] },
     });
     if (storeUrl) {
       graph.push({
         '@type': 'MobileApplication',
-        '@id': `${home}#app`,
+        '@id': `${root}#app`,
         name,
         url: storeUrl,
         description,
+        inLanguage: lang,
         operatingSystem: 'iOS',
         applicationCategory: 'HealthApplication',
         installUrl: storeUrl,
@@ -33,23 +39,24 @@ export function buildJsonLd({ siteUrl, path, name, description, pageTitle, conta
       });
     }
   } else {
-    const url = `${siteUrl}${path}`;
-    const crumbName = path.replace(/\//g, '').replace(/^./, (c) => c.toUpperCase());
+    const url = homeUrl.replace(/\/$/, '') + path;
+    const crumb = crumbName ?? path.replace(/\//g, '').replace(/^./, (c) => c.toUpperCase());
     graph.push(
       {
         '@type': 'WebPage',
         '@id': `${url}#webpage`,
         url,
         name: pageTitle ?? name,
-        isPartOf: { '@type': 'WebSite', url: home, name },
+        inLanguage: lang,
+        isPartOf: { '@type': 'WebSite', '@id': `${root}#website`, url: root, name },
         breadcrumb: { '@id': `${url}#breadcrumb` },
       },
       {
         '@type': 'BreadcrumbList',
         '@id': `${url}#breadcrumb`,
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: home },
-          { '@type': 'ListItem', position: 2, name: crumbName, item: url },
+          { '@type': 'ListItem', position: 1, name: homeName, item: homeUrl },
+          { '@type': 'ListItem', position: 2, name: crumb, item: url },
         ],
       },
     );

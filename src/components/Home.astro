@@ -1,0 +1,69 @@
+---
+// The home page, in any of the site's languages; src/pages/index.astro, ru/index.astro and cs/index.astro render it.
+import Base from '../layouts/Base.astro';
+import DeviceGroup from './DeviceGroup.astro';
+import StoreLabel from './StoreLabel.astro';
+import FeatureRow from './FeatureRow.astro';
+import PrivacyBand from './PrivacyBand.astro';
+import Shot from './Shot.astro';
+import { copyFor, ui } from '../i18n.mjs';
+import { screen } from '../lib/screens';
+import '../styles/landing.css';
+
+interface Props { lang: string }
+const { lang } = Astro.props;
+const { hero, rows, cta, shots } = copyFor(lang);
+const t = ui[lang];
+const [record, see, share] = rows;
+const all = screen(lang, 'iphone-all');
+const week = screen(lang, 'iphone-week');
+const doctor = screen(lang, 'iphone-data-doctor');
+// How far down the data screen the square crop starts, as a share of the screenshot's width, so it opens on the
+// "For your doctor" card: the English capture has the card at about 980 px of 1320, the translated 1.1.0 captures
+// (scrolled further, to put the card at 150 pt) at about 450 px.
+const shareShift = doctor.own ? 26 : 72.7;
+---
+<Base title={t.homeTitle} description={t.homeDescription}>
+  <script is:inline slot="head">
+    // In <head>, so it's set before the hero is first styled: on wide screens that can show the 3D devices,
+    // the hero's screenshots start hidden and the models fade in instead (see DeviceGroup.astro).
+    if (matchMedia('(min-width: 821px)').matches && !(navigator.connection && navigator.connection.saveData)
+      && 'WebGL2RenderingContext' in window) document.documentElement.classList.add('will-3d');
+  </script>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero-grid">
+      <div>
+        <h1 id="hero-title">{hero.headline} <span class="accent">{hero.accent}</span></h1>
+        <p class="lede">{hero.lede}</p>
+        <StoreLabel lang={lang} />
+        <p class="note">{hero.note}</p>
+      </div>
+      <DeviceGroup lang={lang} />
+    </div>
+  </section>
+  <div class="wrap rows">
+    <FeatureRow {...record}>
+      <div class="crop crop-record"><Shot light={all.light} dark={all.dark} width={660} alt={shots.record} /></div>
+    </FeatureRow>
+    <FeatureRow {...see} flip>
+      {/* The translated week screens are from Inhead 1.1.0, which puts a "Did it stop you doing things?" card
+          above the episode card; the taller crop keeps the episode's pain curve in view. */}
+      <div class:list={['crop', 'crop-see', { 'crop-see-tall': week.own }]}><Shot light={week.light} dark={week.dark} width={660} alt={shots.see} /></div>
+    </FeatureRow>
+    <FeatureRow {...share}>
+      <div class="crop crop-share" style={`--share-shift: -${shareShift}%`}><Shot light={doctor.light} dark={doctor.dark} width={660} alt={shots.share} /></div>
+    </FeatureRow>
+  </div>
+
+  <PrivacyBand lang={lang} />
+
+  <section class="cta" aria-labelledby="cta-title">
+    <div class="wrap">
+      <div class="panel">
+        <h2 id="cta-title">{cta.title}</h2>
+        <p>{cta.text}</p>
+        <StoreLabel lang={lang} />
+      </div>
+    </div>
+  </section>
+</Base>

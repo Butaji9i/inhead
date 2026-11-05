@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { hero, rows, privacy, cta, footer, disclaimer, beta, homeBeta } from '../src/data/copy.mjs';
+import { hero, rows, privacy, cta, footer, disclaimer, beta, homeBeta, shots } from '../src/data/copy.mjs';
 
 const FORBIDDEN = /\b(diagnos\w*|detect\w*|identif\w*|predict\w*|treat\w*|prevent\w*|reduc\w*|cure\w*)\b/i;
 
@@ -12,7 +12,7 @@ function strings(value, out = []) {
 }
 
 test('landing copy avoids the words the app itself may not use', () => {
-  const all = strings({ hero, rows, privacy, cta, footer, beta, homeBeta });
+  const all = strings({ hero, rows, privacy, cta, footer, beta, homeBeta, shots });
   for (const s of all) assert.doesNotMatch(s, FORBIDDEN, `forbidden word in: ${s}`);
 });
 

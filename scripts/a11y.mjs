@@ -2,7 +2,7 @@ import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 
 const BASE = process.env.A11Y_BASE ?? 'http://localhost:4321';
-const PATHS = ['/', '/privacy/'];
+const PATHS = ['/', '/privacy/', '/ru/', '/ru/privacy/', '/cs/', '/cs/privacy/'];
 const SCHEMES = ['light', 'dark'];
 const WIDTHS = [400, 1200];
 

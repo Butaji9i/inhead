@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { findViolations, checkRequired, checkJsonLd, checkImgAlt, checkStoreGating, checkRequiredAssets, storeUrlState, checkStoreLinks, configString } from './check-dist.mjs';
+import { findViolations, checkRequired, checkLanguages, checkJsonLd, checkImgAlt, checkStoreGating, checkRequiredAssets, storeUrlState, checkStoreLinks, configString } from './check-dist.mjs';
 
 const page = (content, path = 'index.html') => ({ path, content });
 
@@ -37,20 +37,28 @@ test('binary-like files are not scanned', () => {
   assert.deepEqual(findViolations([page('a@b.co', 'og.png')], []), []);
 });
 
+const PAGES = ['index.html', 'privacy/index.html', 'ru/index.html', 'ru/privacy/index.html', 'cs/index.html', 'cs/privacy/index.html'];
+const without = (p) => PAGES.filter((x) => x !== p);
+
 test('missing privacy page is reported', () => {
-  assert.equal(checkRequired(['index.html'], 'inhead.app').length, 1);
+  assert.equal(checkRequired(without('privacy/index.html'), 'inhead.app').length, 1);
+});
+
+test('a missing page in another language is reported', () => {
+  assert.deepEqual(checkRequired(without('cs/privacy/index.html'), 'inhead.app'), ['missing cs/privacy/index.html']);
+  assert.deepEqual(checkRequired(without('ru/index.html'), 'inhead.app'), ['missing ru/index.html']);
 });
 
 test('wrong CNAME is reported', () => {
-  assert.equal(checkRequired(['privacy/index.html'], 'other.example').length, 1);
+  assert.equal(checkRequired(PAGES, 'other.example').length, 1);
 });
 
 test('missing CNAME is reported', () => {
-  assert.equal(checkRequired(['privacy/index.html'], null).length, 1);
+  assert.equal(checkRequired(PAGES, null).length, 1);
 });
 
 test('correct CNAME with trailing newline passes', () => {
-  assert.deepEqual(checkRequired(['privacy/index.html'], 'inhead.app\n'), []);
+  assert.deepEqual(checkRequired(PAGES, 'inhead.app\n'), []);
 });
 
 test('retina asset names like logo@2x.png do not trigger email violations', () => {
@@ -142,11 +150,12 @@ test('store markup is allowed once STORE_URL is set', () => {
 });
 
 test('missing required assets are each reported', () => {
-  const all = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'icon-512.png', 'icon-32.png', 'icon-192.png'];
+  const all = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', 'og.png', 'og-ru.png', 'og-cs.png', 'icon-512.png', 'icon-32.png', 'icon-192.png'];
   assert.deepEqual(checkRequiredAssets(all), []);
   assert.equal(checkRequiredAssets(all.filter((p) => p !== 'og.png')).length, 1);
-  assert.equal(checkRequiredAssets([]).length, 8);
+  assert.equal(checkRequiredAssets([]).length, 10);
   assert.equal(checkRequiredAssets(all.filter((p) => p !== 'icon-192.png')).length, 1);
+  assert.deepEqual(checkRequiredAssets(all.filter((p) => p !== 'og-cs.png')), ['missing og-cs.png']);
 });
 
 // Fix round 1 regression tests
@@ -184,11 +193,11 @@ test('apple-itunes-app lowercase while STORE_URL is null is flagged', () => {
 });
 
 test('checkRequiredAssets accepts ./og.png', () => {
-  const all = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', './og.png', 'icon-512.png', 'icon-32.png', 'icon-192.png'];
+  const all = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', './og.png', 'og-ru.png', 'og-cs.png', 'icon-512.png', 'icon-32.png', 'icon-192.png'];
   assert.deepEqual(checkRequiredAssets(all), []);
 });
 test('checkRequiredAssets accepts backslash paths', () => {
-  const all = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', '.\\og.png', 'icon-512.png', 'icon-32.png', 'icon-192.png'];
+  const all = ['sitemap-index.xml', 'robots.txt', 'favicon.ico', 'apple-touch-icon.png', '.\\og.png', 'og-ru.png', 'og-cs.png', 'icon-512.png', 'icon-32.png', 'icon-192.png'];
   assert.deepEqual(checkRequiredAssets(all), []);
 });
 
@@ -203,9 +212,16 @@ test('storeUrlState', () => {
 
 const STORE = 'https://apps.apple.com/us/app/inhead/id6814018609';
 
-test('store links: passes when home links the App Store and nothing links /beta/', () => {
+const front = (f) => STORE.replace('/us/', `/${f}/`);
+const homes = () => [
+  page(`<a href="${STORE}">Download</a>`, 'index.html'),
+  page(`<a href="${front('ru')}">Download</a>`, 'ru/index.html'),
+  page(`<a href="${front('cz')}">Download</a>`, 'cs/index.html'),
+];
+
+test('store links: passes when each home links its storefront and nothing links /beta/', () => {
   const files = [
-    page(`<a href="${STORE}">Download</a>`, 'index.html'),
+    ...homes(),
     page('<meta http-equiv="refresh" content="0;url=/"><a href="/">/</a>', 'beta/index.html'),
     page('<a href="/">Home</a>', 'privacy/index.html'),
   ];
@@ -213,8 +229,30 @@ test('store links: passes when home links the App Store and nothing links /beta/
 });
 
 test('store links: reports a home page without the store link, and pages linking the parked /beta/', () => {
-  assert.equal(checkStoreLinks([page('<a href="/beta/">Beta</a>', 'index.html')], STORE).length, 2);
-  assert.equal(checkStoreLinks([page(`<a href="${STORE}">x</a>`, 'index.html'), page('<a href="/beta/">x</a>', 'privacy/index.html')], STORE).length, 1);
+  const [, ...others] = homes();
+  assert.equal(checkStoreLinks([page('<a href="/beta/">Beta</a>', 'index.html'), ...others], STORE).length, 2);
+  assert.equal(checkStoreLinks([...homes(), page('<a href="/beta/">x</a>', 'privacy/index.html')], STORE).length, 1);
+});
+
+test('store links: a Czech home linking the US storefront is reported', () => {
+  const [en, ru] = homes();
+  assert.deepEqual(checkStoreLinks([en, ru, page(`<a href="${STORE}">x</a>`, 'cs/index.html')], STORE),
+    [`cs/index.html: does not link to ${front('cz')}`]);
+});
+
+const alternates = ['en', 'ru', 'cs', 'x-default'].map((l) => `<link rel="alternate" hreflang="${l}" href="https://inhead.app/">`).join('');
+
+test('languages: each page names its language and links all alternates', () => {
+  assert.deepEqual(checkLanguages([
+    page(`<html lang="en">${alternates}`, 'index.html'),
+    page(`<html lang="ru">${alternates}`, 'ru/privacy/index.html'),
+    page('<meta http-equiv="refresh">', 'beta/index.html'),
+  ]), []);
+});
+
+test('languages: a wrong lang and a missing alternate are reported', () => {
+  assert.equal(checkLanguages([page(`<html lang="en">${alternates}`, 'cs/index.html')]).length, 1);
+  assert.equal(checkLanguages([page('<html lang="en"><link rel="alternate" hreflang="en" href="/">', 'index.html')]).length, 3);
 });
 
 test('configString reads a string constant from config text and ignores comments', () => {

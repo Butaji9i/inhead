@@ -91,8 +91,9 @@
 .crop img { display: block; width: 100%; height: auto; -webkit-user-drag: none; }
 .crop-record { aspect-ratio: 330 / 620; }
 .crop-see { aspect-ratio: 330 / 390; }
+.crop-see-tall { aspect-ratio: 330 / 450; }
 .crop-share { aspect-ratio: 1; }
-.crop-share img { margin-top: -72.7%; }
+.crop-share img { margin-top: var(--share-shift, -72.7%); }
 
 /* ---------- privacy band (always dark) ---------- */
 .band { background: #0b1420; color: #f2f5f9; padding-block: 5rem; }
