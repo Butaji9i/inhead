@@ -21,7 +21,9 @@ export function buildJsonLd({ siteUrl, path, name, description, pageTitle, conta
     if (storeUrl) {
       graph.push({
         '@type': 'MobileApplication',
+        '@id': `${home}#app`,
         name,
+        url: storeUrl,
         description,
         operatingSystem: 'iOS',
         applicationCategory: 'HealthApplication',
