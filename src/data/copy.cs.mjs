@@ -6,46 +6,43 @@
 export const hero = {
   headline: 'Váš deník bolestí hlavy.',
   accent: 'Přehledně uspořádaný.',
-  lede: 'Zapište, co se stalo — kdy bolest začala, jak silná byla a co jste si vzali — a uvidíte, co vaše vlastní záznamy ukazují.',
+  lede: 'Deník bolestí hlavy pro iPhone a iPad. Zaznamenejte bolest pokaždé, když se změní, co jste si vzali a co ji provázelo — Inhead to všechno udrží na jedné linii.',
   note: 'iPhone a iPad · Bez účtu · Nic se nesleduje',
 };
 
-export const rows = [
-  {
-    key: 'record',
-    eyebrow: '1 · Zapisujte',
-    title: 'Zapište to hned, jak se to stane.',
-    lead: 'Kdy bolest začala a skončila, kde to bolelo a každá změna bolesti, dokud trvala.',
-    points: [
-      'Nová intenzita pokaždé, když se bolest zlepší nebo zhorší — jedna epizoda je všechny uchová jako křivku bolesti',
-      'Příznaky, které ji provázely — nevolnost, citlivost na světlo a zvuk, aura a další',
-      'Léky, které jste si vzali, a kdy',
-      'Faktory, které chcete sledovat: spánek, menstruace, počasí — cokoli, na co chcete dát pozor',
-    ],
+export const live = {
+  label:
+    'Linie deníku, která se kreslí během jednoho dne: špatný spánek, bolest 3 z 10 v devět, ibuprofen, káva, bolest 8 v poledne, nevolnost, citlivost na světlo, bolest 4, bolest 2, epizoda ukončena, menstruace.',
+  pain: 'Bolest',
+  names: {
+    sleep: 'Špatný spánek',
+    med: 'Ibuprofen',
+    coffee: 'Káva',
+    nausea: 'Nevolnost',
+    light: 'Citlivost na světlo',
+    end: 'Epizoda ukončena',
+    period: 'Menstruace',
   },
-  {
-    key: 'see',
-    eyebrow: '2 · Prohlížejte',
-    title: 'Podívejte se, co z toho vychází.',
-    lead: 'Vaše dny na první pohled: dny s bolestí hlavy, dny s lékem a dny, kdy jste nic nezapsali.',
-    points: [
-      'Vaše záznamy porovnané s prahy ICHD-3, s citovanými kritérii, abyste viděli proč',
-      'Dny s akutním lékem za měsíc, počítané podle definice ICHD-3',
-      'Jak se vaše záznamy mění v čase, sestavené jen z toho, co jste zadali',
-    ],
-  },
-  {
-    key: 'share',
-    eyebrow: '3 · Sdílejte',
-    title: 'Vezměte to k lékaři.',
-    lead: 'Exportujte zprávu, kterou můžete předat, s čísly i definicemi, ze kterých vycházejí.',
-    points: ['Každé číslo má svou definici', 'Zpráva jde jen tam, kam ji sami pošlete'],
-  },
-];
+};
 
+export const rise = {
+  title: 'Jak sílila.',
+  accent: 'A jak polevovala.',
+  text: 'Jedna bolest hlavy uchová každou intenzitu, kterou zaznamenáte — každou v jejím čase, s místem a charakterem bolesti — a vykreslí je jako jednu křivku s vrcholem.',
+};
+
+export const hours = {
+  title: 'Bolest hlavy',
+  accent: 'není jedno číslo.',
+  steps: [
+    { title: 'Začíná.', text: 'Kdy začala, jak silná je od 0 do 10, kde bolí a jaká je.' },
+    { title: 'Horší. Zaznamenejte změnu.', text: 'Nová intenzita se přidá ke stejné bolesti hlavy, ve svém čase — ne jako další záznam.' },
+    { title: 'Konec. 8 hodin, vrchol 8.', text: 'Uvidíte ji ve svém měsíci a roce a ve zprávě PDF, kterou můžete vzít k lékaři.' },
+  ],
+};
 export const privacy = {
-  eyebrow: 'Soukromí od základu',
-  title: 'Váš deník patří jen vám.',
+  title: 'Váš deník',
+  accent: 'patří vám.',
   lead: 'Inhead nemá žádný vlastní server ani účty — nemáme u vás co číst.',
   tiles: [
     { key: 'account', title: 'Bez účtu', text: 'Žádná registrace, e-mail ani heslo.' },
@@ -55,7 +52,6 @@ export const privacy = {
 };
 
 export const faq = {
-  eyebrow: 'Otázky',
   title: 'Na co se lidé ptají.',
   items: [
     {
@@ -86,7 +82,6 @@ export const painPage = {
   description:
     'V Inheadu, deníku bolestí hlavy a migrény pro iPhone a iPad, uchová jedna epizoda každou zaznamenanou intenzitu bolesti — s časem, místem a charakterem — a vykreslí je jako křivku bolesti.',
   homeLink: 'Jak zaznamenat změny bolesti',
-  eyebrow: 'Bolest v čase',
   headline: 'Jedna bolest hlavy.',
   accent: 'Každá změna bolesti.',
   lede: 'Bolest hlavy je málokdy jedno číslo. V Inheadu jedna epizoda uchová každou intenzitu, kterou zaznamenáte — 3/10 na začátku, 8/10 v nejhorší chvíli, 4/10, když polevuje — každou v jejím čase.',
@@ -103,8 +98,7 @@ export const painPage = {
     points: [
       'Každá epizoda s křivkou bolesti, vrcholem a délkou trvání',
       'Váš měsíc s vyznačenými dny s bolestí hlavy a pod každým dnem jeho epizody',
-      'Váš rok na jedné stránce — čím silnější bolest, tím tmavší červená',
-      'Zpráva pro lékaře exportovaná jako PDF, u každého čísla s jeho definicí',
+      'Váš rok na jedné stránce a PDF pro lékaře, u každého čísla s jeho definicí',
     ],
   },
   faqTitle: 'Otázky k záznamům bolesti',
@@ -127,12 +121,11 @@ export const cta = {
 };
 
 export const shots = {
-  group: 'Obrazovky aplikace Inhead',
-  ipad: 'Inhead na iPadu: podrobnosti epizody — křivka bolesti, záznamy bolesti během dne a druh, který jste jí dali',
   iphone: 'Inhead na iPhonu: měsíc, kde jsou dny s bolestí hlavy vyznačené jemnými barevnými skvrnami a pod ním epizody vybraného dne',
+  share: 'Obrazovka Data v Inheadu: karta Pro lékaře nad mřížkou Váš rok z malých čtverečků — čím silnější bolest, tím tmavší červená',
+  ipad: 'Inhead na iPadu: podrobnosti epizody — křivka bolesti, záznamy bolesti během dne a druh, který jste jí dali',
   record: 'Obrazovka Časová osa v Inheadu: pruh týdne, oddíl Probíhá s menstruací a špatným spánkem a záznamy bolesti 3/10, 8/10 a 4/10 v 9:00, 12:00 a 15:00',
   see: 'Obrazovka Epizody v Inheadu: pruh dní, kde jsou dny s bolestí hlavy vyznačené barevnými skvrnami, a pod ním karta epizody s křivkou bolesti',
-  share: 'Obrazovka Data v Inheadu: karta Pro lékaře nad mřížkou Váš rok z malých čtverečků — čím silnější bolest, tím tmavší červená',
 };
 
 export const footer = {

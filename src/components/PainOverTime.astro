@@ -1,63 +1,97 @@
 ---
 // The page about logging pain as it changes during one headache, in any of the site's languages;
 // src/pages/pain-over-time.astro, ru/pain-over-time.astro and cs/pain-over-time.astro render it.
+// The home page's day-to-night language (Home.astro): the sky with the live line, the three steps as times on it,
+// the screens on the deepest hill's blue, the questions, and the night with the call to action.
 import Base from '../layouts/Base.astro';
 import StoreLabel from './StoreLabel.astro';
+import LiveLine from './LiveLine.astro';
+import Night from './Night.astro';
 import Shot from './Shot.astro';
 import Faq from './Faq.astro';
 import { copyFor } from '../i18n.mjs';
+import { painColor, eventLabel } from '../lib/liveline.mjs';
 import { screen } from '../lib/screens';
 import '../styles/landing.css';
 
 interface Props { lang: string }
 const { lang } = Astro.props;
-const { painPage: p, shots } = copyFor(lang);
+const { painPage: p, shots, live } = copyFor(lang);
 const episode = screen(lang, 'ipad-hero');
-const all = screen(lang, 'iphone-all');
-const week = screen(lang, 'iphone-week');
+// The steps happen in the same headache as the line: started at 09:00 at 3, changed at 12:00 to 8, ended at 17:00.
+const STOPS = [{ time: '09:00', level: 3 }, { time: '12:00', level: 8 }, { time: '17:00', level: 0, ended: true }];
+const steps = p.how.steps.map((s: { title: string; text: string }, i: number) => ({ ...s, ...STOPS[i] }));
+// What you see afterwards: one screen per point.
+const SCREENS = [['iphone-week', shots.see], ['iphone-month', shots.iphone], ['iphone-data-doctor', shots.share]];
+// The Data screen opens on "For your doctor", as the home page's crop used to: the English capture has the card
+// at about 980 px of 1320, the translated 1.1.0 captures at about 450 px (shares of the width).
+const cards = p.see.points.map((text: string, i: number) => {
+  const [name, alt] = SCREENS[i];
+  const shot = screen(lang, name);
+  const doctor = name === 'iphone-data-doctor';
+  // `pad`: the English capture, scrolled that far, has no status bar left, so a strip of the app's background
+  // keeps the card's title clear of the Dynamic Island.
+  return { text, shot, alt, shift: doctor ? (shot.own ? 26 : 72.7) : 0, pad: doctor && !shot.own ? 16 : 0 };
+});
 ---
-<Base title={p.title} description={p.description} faq={p.faq}>
-  <section class="page-hero" aria-labelledby="page-title">
-    <div class="wrap page-hero-grid">
+<Base title={p.title} description={p.description} faq={p.faq} bodyClass="scenic">
+  <section class="sky" aria-labelledby="page-title">
+    <div class="wrap sky-hero">
+      <h1 id="page-title">{p.headline} <span class="accent">{p.accent}</span></h1>
+      <p class="lede">{p.lede}</p>
+      <StoreLabel lang={lang} />
+    </div>
+    <LiveLine lang={lang} />
+  </section>
+
+  <section class="rise" aria-labelledby="how-title">
+    <div class="wrap rise-grid">
       <div>
-        <p class="eyebrow">{p.eyebrow}</p>
-        <h1 id="page-title">{p.headline} <span class="accent">{p.accent}</span></h1>
-        <p class="lede">{p.lede}</p>
-        <StoreLabel lang={lang} />
+        <h2 id="how-title">{p.how.title}</h2>
+        <ol class="hour-list hour-list-dark">
+          {steps.map((s) => (
+            <li class="hour">
+              <div class="hour-when">
+                <span class="hour-time">{s.time}</span>
+                {s.ended
+                  ? <span class="hour-ended">{live.names.end}</span>
+                  : <span class="scale" role="img" aria-label={eventLabel({ kind: 'pain', level: s.level }, live.names, live.pain)}>
+                      {Array.from({ length: 10 }, (_, i) => <span style={i < s.level ? `background:${painColor(s.level)}` : undefined} />)}
+                    </span>}
+              </div>
+              <div>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
       </div>
-      {/* The iPad's episode screen down to "Log Change": the pain curve, its peak and the three changes. */}
-      <div class="shot"><div class="crop crop-episode"><Shot light={episode.light} dark={episode.dark} width={1040} loading="eager" alt={shots.ipad} /></div></div>
+      <div class="frame-ipad">
+        <div class="frame-ipad-screen"><Shot light={episode.light} dark={episode.dark} width={1100} alt={shots.ipad} /></div>
+      </div>
     </div>
   </section>
 
-  <div class="wrap rows">
-    <div class="row">
-      <div class="row-text">
-        <h2>{p.how.title}</h2>
-        <ol class="steps">
-          {p.how.steps.map((s) => <li><h3>{s.title}</h3><p>{s.text}</p></li>)}
-        </ol>
+  <section class="screens" aria-labelledby="see-title">
+    <div class="wrap">
+      <h2 id="see-title">{p.see.title}</h2>
+      <div class="screen-row">
+        {cards.map((c) => (
+          <figure>
+            <div class="frame-phone">
+              {c.shift
+                ? <div class="frame-phone-scroll" style={`--shift:${c.shift}%;--pad:${c.pad}%`}><div><Shot light={c.shot.light} dark={c.shot.dark} width={520} alt={c.alt} /></div></div>
+                : <Shot light={c.shot.light} dark={c.shot.dark} width={520} alt={c.alt} />}
+            </div>
+            <figcaption>{c.text}</figcaption>
+          </figure>
+        ))}
       </div>
-      <div class="shot"><div class="crop crop-record"><Shot light={all.light} dark={all.dark} width={660} alt={shots.record} /></div></div>
     </div>
-    <div class="row flip">
-      <div class="row-text">
-        <h2>{p.see.title}</h2>
-        <ul class="row-points">{p.see.points.map((pt) => <li>{pt}</li>)}</ul>
-      </div>
-      <div class:list={['shot']}><div class:list={['crop', 'crop-see', { 'crop-see-tall': week.own }]}><Shot light={week.light} dark={week.dark} width={660} alt={shots.see} /></div></div>
-    </div>
-  </div>
+  </section>
 
   <Faq title={p.faqTitle} items={p.faq} />
 
-  <section class="cta" aria-labelledby="cta-title">
-    <div class="wrap">
-      <div class="panel">
-        <h2 id="cta-title">{p.cta.title}</h2>
-        <p>{p.cta.text}</p>
-        <StoreLabel lang={lang} />
-      </div>
-    </div>
-  </section>
+  <Night lang={lang} privacy={false} cta={p.cta} />
 </Base>

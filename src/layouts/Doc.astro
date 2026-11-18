@@ -1,7 +1,27 @@
 ---
+// Markdown documents (the privacy policy in each language), in the home page's day-to-night design: the frontmatter's
+// two-tone `headline` and `accent` on the sky over the drifting hills, the text as a sheet on the deepest hill's
+// blue, then the night with the call to action.
 import Base from './Base.astro';
+import DayHills from '../components/DayHills.astro';
+import Night from '../components/Night.astro';
+import { langFromPath } from '../i18n.mjs';
+import '../styles/landing.css';
+
 const fm = Astro.props.frontmatter ?? {};
+const lang = langFromPath(Astro.url.pathname);
 ---
-<Base title={fm.title} description={fm.description}>
-  <div class="wrap doc"><slot /></div>
+<Base title={fm.title} description={fm.description} bodyClass="scenic">
+  <section class="sky doc-sky" aria-labelledby="doc-title">
+    <div class="wrap sky-hero">
+      <h1 id="doc-title">{fm.headline} <span class="accent">{fm.accent}</span></h1>
+    </div>
+    <DayHills />
+  </section>
+  <div class="doc-sheet">
+    <div class="wrap">
+      <article class="doc"><slot /></article>
+    </div>
+  </div>
+  <Night lang={lang} privacy={false} />
 </Base>

@@ -78,11 +78,9 @@ footer.site { border-top: 1px solid var(--line); padding-block: 2.75rem 2.25rem;
 .fcols a { display: block; padding: 0.15rem 0; color: var(--muted); text-decoration: none; }
 .fcols a:hover { color: var(--text); text-decoration: underline; }
 .fcols a[aria-current='true'] { color: var(--text); font-weight: 600; }
-.credits { margin: 0.6rem 0 0; font-size: 0.8rem; }
-.credits a { color: inherit; }
 .disc { margin: 2rem 0 0; padding-top: 1.25rem; border-top: 1px solid var(--line); font-size: 0.875rem; max-width: none; }
 
-/* markdown documents (privacy) */
+/* markdown documents (privacy); their sky, sheet and night are in landing.css, set by layouts/Doc.astro */
 .doc { padding-block: 1rem 3rem; }
 .doc :is(p, ul, ol, h1, h2, h3, blockquote) { max-width: var(--measure); }
 .doc h1 { font-size: clamp(2rem, 5vw, 2.75rem); line-height: 1.1; letter-spacing: -0.025em; margin: 1.5rem 0 0.75rem; }

@@ -15,8 +15,8 @@ const ogImage = `${SITE_URL}/${lang === DEFAULT_LANG ? 'og' : `og-${lang}`}.png`
 const t = ui[lang];
 // The breadcrumb's name for each page under the home page.
 const CRUMBS: Record<string, string> = { '/privacy/': t.privacy, '/pain-over-time/': t.painOverTime };
-// What the app does, for the MobileApplication's featureList: the home page's Record, See and Share points.
-const features = copyFor(lang).rows.flatMap((r: { points: string[] }) => r.points);
+// What the app does, for the MobileApplication's featureList: the points the pain-over-time page shows.
+const features: string[] = copyFor(lang).painPage.see.points;
 const jsonLd = JSON.stringify(
   buildJsonLd({
     siteUrl: SITE_URL, path: base, lang, homeUrl: `${SITE_URL}${localePath(lang, '/')}`, name: SITE_NAME, description,

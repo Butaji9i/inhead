@@ -1,72 +1,80 @@
 ---
 // The home page, in any of the site's languages; src/pages/index.astro, ru/index.astro and cs/index.astro render it.
+// Day to night, in the App Store screenshots' style: the sky with the live diary line
+// and the hills, the feature on the deepest hill blue, one headache hour by hour, the questions, then night.
 import Base from '../layouts/Base.astro';
-import DeviceGroup from './DeviceGroup.astro';
 import StoreLabel from './StoreLabel.astro';
-import FeatureRow from './FeatureRow.astro';
-import PrivacyBand from './PrivacyBand.astro';
+import LiveLine from './LiveLine.astro';
+import Night from './Night.astro';
 import Shot from './Shot.astro';
 import Faq from './Faq.astro';
 import { copyFor, ui, localePath } from '../i18n.mjs';
+import { painColor, eventLabel } from '../lib/liveline.mjs';
 import { screen } from '../lib/screens';
 import '../styles/landing.css';
 
 interface Props { lang: string }
 const { lang } = Astro.props;
-const { hero, rows, cta, shots, faq, painPage } = copyFor(lang);
+const { hero, rise, hours, live, shots, faq, painPage } = copyFor(lang);
 const t = ui[lang];
-const [record, see, share] = rows;
-const all = screen(lang, 'iphone-all');
-const week = screen(lang, 'iphone-week');
-const doctor = screen(lang, 'iphone-data-doctor');
-// How far down the data screen the square crop starts, as a share of the screenshot's width, so it opens on the
-// "For your doctor" card: the English capture has the card at about 980 px of 1320, the translated 1.1.0 captures
-// (scrolled further, to put the card at 150 pt) at about 450 px.
-const shareShift = doctor.own ? 26 : 72.7;
+const episode = screen(lang, 'ipad-hero');
+const day = screen(lang, 'iphone-all');
+// The same headache as the line above: its times and pain levels, beside the words in `hours.steps`.
+const STOPS = [{ time: '09:00', level: 3 }, { time: '12:00', level: 8 }, { time: '17:00', level: 0, ended: true }];
+const steps = hours.steps.map((s: { title: string; text: string }, i: number) => ({ ...s, ...STOPS[i] }));
 ---
-<Base title={t.homeTitle} description={t.homeDescription} faq={faq.items}>
-  <script is:inline slot="head">
-    // In <head>, so it's set before the hero is first styled: on wide screens that can show the 3D devices,
-    // the hero's screenshots start hidden and the models fade in instead (see DeviceGroup.astro).
-    if (matchMedia('(min-width: 821px)').matches && !(navigator.connection && navigator.connection.saveData)
-      && 'WebGL2RenderingContext' in window) document.documentElement.classList.add('will-3d');
-  </script>
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="wrap hero-grid">
+<Base title={t.homeTitle} description={t.homeDescription} faq={faq.items} bodyClass="scenic">
+  <section class="sky" aria-labelledby="hero-title">
+    <div class="wrap sky-hero">
+      <h1 id="hero-title">{hero.headline} <span class="accent">{hero.accent}</span></h1>
+      <p class="lede">{hero.lede}</p>
+      <StoreLabel lang={lang} />
+      <p class="note">{hero.note}</p>
+    </div>
+    <LiveLine lang={lang} />
+  </section>
+
+  <section class="rise" aria-labelledby="rise-title">
+    <div class="wrap rise-grid">
       <div>
-        <h1 id="hero-title">{hero.headline} <span class="accent">{hero.accent}</span></h1>
-        <p class="lede">{hero.lede}</p>
-        <StoreLabel lang={lang} />
-        <p class="note">{hero.note}</p>
+        <h2 id="rise-title">{rise.title}<br /><span class="accent">{rise.accent}</span></h2>
+        <p>{rise.text}</p>
+        <a class="rise-more" href={localePath(lang, '/pain-over-time/')}>{painPage.homeLink}</a>
       </div>
-      <DeviceGroup lang={lang} />
-    </div>
-  </section>
-  <div class="wrap rows">
-    <FeatureRow {...record} more={{ href: localePath(lang, '/pain-over-time/'), text: painPage.homeLink }}>
-      <div class="crop crop-record"><Shot light={all.light} dark={all.dark} width={660} alt={shots.record} /></div>
-    </FeatureRow>
-    <FeatureRow {...see} flip>
-      {/* The translated week screens are from Inhead 1.1.0, which puts a "Did it stop you doing things?" card
-          above the episode card; the taller crop keeps the episode's pain curve in view. */}
-      <div class:list={['crop', 'crop-see', { 'crop-see-tall': week.own }]}><Shot light={week.light} dark={week.dark} width={660} alt={shots.see} /></div>
-    </FeatureRow>
-    <FeatureRow {...share}>
-      <div class="crop crop-share" style={`--share-shift: -${shareShift}%`}><Shot light={doctor.light} dark={doctor.dark} width={660} alt={shots.share} /></div>
-    </FeatureRow>
-  </div>
-
-  <PrivacyBand lang={lang} />
-
-  <Faq eyebrow={faq.eyebrow} title={faq.title} items={faq.items} />
-
-  <section class="cta" aria-labelledby="cta-title">
-    <div class="wrap">
-      <div class="panel">
-        <h2 id="cta-title">{cta.title}</h2>
-        <p>{cta.text}</p>
-        <StoreLabel lang={lang} />
+      <div class="frame-ipad">
+        <div class="frame-ipad-screen"><Shot light={episode.light} dark={episode.dark} width={1100} alt={shots.ipad} /></div>
       </div>
     </div>
   </section>
+
+  <section class="hours" aria-labelledby="hours-title">
+    <div class="wrap hours-grid">
+      <div>
+        <h2 id="hours-title">{hours.title}<br /><span class="accent">{hours.accent}</span></h2>
+        <ol class="hour-list">
+          {steps.map((s) => (
+            <li class="hour">
+              <div class="hour-when">
+                <span class="hour-time">{s.time}</span>
+                {s.ended
+                  ? <span class="hour-ended">{live.names.end}</span>
+                  : <span class="scale" role="img" aria-label={eventLabel({ kind: 'pain', level: s.level }, live.names, live.pain)}>
+                      {Array.from({ length: 10 }, (_, i) => <span style={i < s.level ? `background:${painColor(s.level)}` : undefined} />)}
+                    </span>}
+              </div>
+              <div>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div class="frame-phone"><Shot light={day.light} dark={day.dark} width={600} alt={shots.record} /></div>
+    </div>
+  </section>
+
+  <Faq title={faq.title} items={faq.items} />
+
+  <Night lang={lang} />
 </Base>

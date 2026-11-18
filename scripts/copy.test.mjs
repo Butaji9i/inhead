@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { hero, rows, privacy, cta, footer, disclaimer, beta, homeBeta, shots, faq, painPage } from '../src/data/copy.mjs';
+import { hero, live, rise, hours, privacy, cta, footer, disclaimer, beta, homeBeta, shots, faq, painPage } from '../src/data/copy.mjs';
 
 const FORBIDDEN = /\b(diagnos\w*|detect\w*|identif\w*|predict\w*|treat\w*|prevent\w*|reduc\w*|cure\w*)\b/i;
 
@@ -12,7 +12,7 @@ function strings(value, out = []) {
 }
 
 test('landing copy avoids the words the app itself may not use', () => {
-  const all = strings({ hero, rows, privacy, cta, footer, beta, homeBeta, shots, faq, painPage });
+  const all = strings({ hero, live, rise, hours, privacy, cta, footer, beta, homeBeta, shots, faq, painPage });
   for (const s of all) assert.doesNotMatch(s, FORBIDDEN, `forbidden word in: ${s}`);
 });
 
@@ -21,9 +21,16 @@ test('the disclaimer says it is not a diagnosis and not medical advice', () => {
   assert.match(disclaimer, /not medical advice/);
 });
 
-test('three rows in the agreed order', () => {
-  assert.deepEqual(rows.map((r) => r.key), ['record', 'see', 'share']);
-  for (const r of rows) assert.ok(r.title && r.lead && r.points.length >= 2, r.key);
+test('one headache, hour by hour: three stops, each with a title and a sentence', () => {
+  assert.equal(hours.steps.length, 3);
+  for (const st of hours.steps) assert.ok(st.title && st.text, st.title);
+  assert.ok(rise.title && rise.accent && rise.text);
+});
+
+test('the live line has a name for every kind of entry it draws', async () => {
+  const { DAY } = await import('../src/lib/liveline.mjs');
+  for (const e of DAY) if (e.kind !== 'pain') assert.ok(live.names[e.kind], e.kind);
+  assert.ok(live.pain && live.label);
 });
 
 test('three privacy tiles', () => {
@@ -35,7 +42,7 @@ const WORDS = /\b(stars?|rated|reviews?|testimonial|free trial|pro|premium|subsc
 const bad = (s) => MONEY.test(s) || WORDS.test(s);
 
 test('no rating, review or price wording', () => {
-  const all = strings({ hero, rows, privacy, cta, footer, disclaimer, beta, homeBeta, faq, painPage }).join(' ');
+  const all = strings({ hero, live, rise, hours, privacy, cta, footer, disclaimer, beta, homeBeta, faq, painPage }).join(' ');
   assert.equal(bad(all), false);
 });
 

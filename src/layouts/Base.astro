@@ -10,6 +10,8 @@ const fm = Astro.props.frontmatter ?? {};
 const title: string = fm.title ?? Astro.props.title ?? SITE_NAME;
 const description: string = fm.description ?? Astro.props.description ?? '';
 const faq: { q: string; a: string }[] = Astro.props.faq ?? [];
+// `bodyClass`: a page's own class on <body> (the home page's sky runs up behind the header).
+const bodyClass: string | undefined = Astro.props.bodyClass;
 const lang = langFromPath(Astro.url.pathname);
 const base = basePath(Astro.url.pathname);
 ---
@@ -19,7 +21,7 @@ const base = basePath(Astro.url.pathname);
     <Seo title={title} description={description} faq={faq} />
     <slot name="head" />
   </head>
-  <body>
+  <body class={bodyClass}>
     <a class="skip" href="#main">{ui[lang].skip}</a>
     <header class="site">
       <div class="wrap">

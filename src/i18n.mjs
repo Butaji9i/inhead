@@ -52,8 +52,6 @@ export const ui = {
     support: 'Support',
     site: 'Site',
     language: 'Language',
-    models: '3D models',
-    by: 'by',
     painOverTime: 'Pain over time',
     homeTitle: 'Inhead — headache and migraine diary for iPhone and iPad',
     homeDescription:
@@ -71,8 +69,6 @@ export const ui = {
     support: 'Поддержка',
     site: 'Сайт',
     language: 'Язык',
-    models: '3D-модели',
-    by: '— автор',
     painOverTime: 'Боль во времени',
     homeTitle: 'Inhead — дневник головной боли и мигрени для iPhone и iPad',
     homeDescription:
@@ -90,8 +86,6 @@ export const ui = {
     support: 'Podpora',
     site: 'Web',
     language: 'Jazyk',
-    models: '3D modely',
-    by: 'od',
     painOverTime: 'Bolest v čase',
     homeTitle: 'Inhead — deník bolestí hlavy a migrény pro iPhone a iPad',
     homeDescription:

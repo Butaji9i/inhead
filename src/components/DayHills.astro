@@ -1,0 +1,13 @@
+---
+// The four day hills from the App Store cards, drifting left (src/scripts/liveline.ts); under the live line on the
+// home page and the pain-over-time page, and under the headline of the document pages.
+import { hillShape, HILLS } from '../lib/liveline.mjs';
+
+const W = 1440;
+---
+<svg class="hills hills-day" data-hills="day" viewBox={`0 0 ${W} ${HILLS.day.height}`} preserveAspectRatio="none" aria-hidden="true">
+  {HILLS.day.layers.map((h) => <path d={hillShape(h, 0, W, HILLS.day.height)} />)}
+</svg>
+<script>
+  import '../scripts/liveline';
+</script>
