@@ -4,6 +4,8 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://inhead.app',
   output: 'static',
+  // Astro's floating dev toolbar sits over the hero's hills in `astro dev`; it is never in a build.
+  devToolbar: { enabled: false },
   trailingSlash: 'always',
   build: { format: 'directory' },
   // The Beta page is parked (src/pages/_beta.astro); old links to it land on the home page.

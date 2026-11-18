@@ -1,0 +1,38 @@
+---
+// The live diary line over the day hills (src/lib/liveline.mjs). The server renders one still frame, so the
+// picture is there without JavaScript and for anyone who asks for reduced motion; src/scripts/liveline.ts
+// then animates it. The line and the events fade out at the left edge; the sun is outside that mask, so its
+// glow is never clipped, and it sits above the hills.
+import DayHills from './DayHills.astro';
+import { frame, BAND, ICONS, INK, painColor, eventLabel } from '../lib/liveline.mjs';
+import { copyFor } from '../i18n.mjs';
+
+interface Props { lang: string }
+const { live } = copyFor(Astro.props.lang);
+const W = 1440;
+const f = frame({ width: W });
+const pct = (x: number, of: number) => `${((x / of) * 100).toFixed(3)}%`;
+---
+<div class="live" data-live data-names={JSON.stringify(live.names)} data-pain={live.pain} role="img" aria-label={live.label}>
+  <div class="live-band">
+    <svg class="live-line" viewBox={`0 0 ${W} ${BAND}`} preserveAspectRatio="none" aria-hidden="true">
+      <path class="live-glow" d={f.path} />
+      <path class="live-ink" d={f.path} />
+    </svg>
+    <div class="live-events" aria-hidden="true">
+      {f.events.map((e) => (
+        <div class="ev" data-n={e.n} style={`left:${pct(e.x, W)};top:${pct(e.y, BAND)}`}>
+          <span class="ev-label"><span class="ev-time">{e.time}</span> {eventLabel(e, live.names, live.pain)}</span>
+          {e.kind === 'pain'
+            ? <span class:list={['ev-dot', { 'ev-dot-high': e.level >= 7 }]} style={`background:${painColor(e.level)}`}>{e.level}</span>
+            : <span class="ev-icon" style={`color:${INK[e.kind]}`}><svg viewBox="0 0 24 24" width="19" height="19" set:html={ICONS[e.kind]} /></span>}
+        </div>
+      ))}
+    </div>
+    <div class="live-sun" aria-hidden="true" style={`left:${pct(f.pen.x, W)};top:${pct(f.pen.y, BAND)}`}><span></span></div>
+  </div>
+  <DayHills />
+</div>
+<script>
+  import '../scripts/liveline';
+</script>

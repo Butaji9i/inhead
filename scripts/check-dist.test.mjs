@@ -37,7 +37,8 @@ test('binary-like files are not scanned', () => {
   assert.deepEqual(findViolations([page('a@b.co', 'og.png')], []), []);
 });
 
-const PAGES = ['index.html', 'privacy/index.html', 'ru/index.html', 'ru/privacy/index.html', 'cs/index.html', 'cs/privacy/index.html'];
+const PAGES = ['index.html', 'privacy/index.html', 'pain-over-time/index.html', 'ru/index.html', 'ru/privacy/index.html', 'ru/pain-over-time/index.html',
+  'cs/index.html', 'cs/privacy/index.html', 'cs/pain-over-time/index.html'];
 const without = (p) => PAGES.filter((x) => x !== p);
 
 test('missing privacy page is reported', () => {
@@ -259,4 +260,8 @@ test('configString reads a string constant from config text and ignores comments
   assert.equal(configString(`// export const STORE_URL = 'https://x';\nexport const STORE_URL: string | null = '${STORE}';`, 'STORE_URL'), STORE);
   assert.equal(configString('export const STORE_URL: string | null = null;', 'STORE_URL'), null);
   assert.equal(configString('export const OTHER = 1;', 'STORE_URL'), null);
+});
+
+test('a missing pain-over-time page is reported', () => {
+  assert.deepEqual(checkRequired(without('ru/pain-over-time/index.html'), 'inhead.app'), ['missing ru/pain-over-time/index.html']);
 });

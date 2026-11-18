@@ -2,9 +2,9 @@
 layout: ../../layouts/Doc.astro
 title: Zásady ochrany soukromí — Inhead
 description: Jak Inhead zachází s vašimi daty. Deník bolestí hlavy uchovává ve vašem zařízení a ve vašem iCloudu jen tehdy, když to zapnete.
+headline: Zásady ochrany soukromí.
+accent: Váš deník patří vám.
 ---
-
-# Zásady ochrany soukromí — Inhead
 
 **Poslední aktualizace: 5. listopadu 2026**
 

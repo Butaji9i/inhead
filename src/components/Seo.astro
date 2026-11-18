@@ -1,10 +1,11 @@
 ---
 import { SITE_NAME, SITE_URL, CONTACT_EMAIL, STORE_URL, APP_STORE_ID } from '../config';
 import { buildJsonLd } from '../lib/jsonld.mjs';
-import { langFromPath, basePath, localePath, storeUrlFor, ui, LANGS, LANG_META, DEFAULT_LANG } from '../i18n.mjs';
+import { langFromPath, basePath, localePath, storeUrlFor, ui, copyFor, LANGS, LANG_META, DEFAULT_LANG } from '../i18n.mjs';
 
-interface Props { title: string; description: string }
-const { title, description } = Astro.props;
+// `faq`: the questions and answers the page shows, given to search engines as FAQPage markup.
+interface Props { title: string; description: string; faq?: { q: string; a: string }[] }
+const { title, description, faq = [] } = Astro.props;
 const path = Astro.url.pathname;
 const lang = langFromPath(path);
 const base = basePath(path);
@@ -12,10 +13,15 @@ const canonical = new URL(path, Astro.site).href;
 // public/og.png is English; og-ru.png and og-cs.png are the same card in Russian and Czech (scripts/make-og.mjs).
 const ogImage = `${SITE_URL}/${lang === DEFAULT_LANG ? 'og' : `og-${lang}`}.png`;
 const t = ui[lang];
+// The breadcrumb's name for each page under the home page.
+const CRUMBS: Record<string, string> = { '/privacy/': t.privacy, '/pain-over-time/': t.painOverTime };
+// What the app does, for the MobileApplication's featureList: the points the pain-over-time page shows.
+const features: string[] = copyFor(lang).painPage.see.points;
 const jsonLd = JSON.stringify(
   buildJsonLd({
     siteUrl: SITE_URL, path: base, lang, homeUrl: `${SITE_URL}${localePath(lang, '/')}`, name: SITE_NAME, description,
-    pageTitle: title, contactEmail: CONTACT_EMAIL, storeUrl: storeUrlFor(STORE_URL, lang), homeName: t.home, crumbName: t.privacy,
+    pageTitle: title, contactEmail: CONTACT_EMAIL, storeUrl: storeUrlFor(STORE_URL, lang), homeName: t.home, crumbName: CRUMBS[base],
+    faq, features,
   }),
 ).replace(/</g, '\\u003c');
 ---

@@ -15,7 +15,7 @@ function strings(value, out = []) {
 const shape = (v) => (typeof v === 'string' ? '' : Array.isArray(v) ? v.map(shape) : v && typeof v === 'object'
   ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, k === 'key' ? x : shape(x)])) : v);
 
-const PAGE_COPY = ['hero', 'rows', 'privacy', 'cta', 'shots', 'footer', 'disclaimer'];
+const PAGE_COPY = ['hero', 'live', 'rise', 'hours', 'privacy', 'cta', 'shots', 'footer', 'disclaimer', 'faq', 'painPage'];
 
 test('every language has the same copy, row for row and point for point', () => {
   const en = copyFor('en');
@@ -26,10 +26,22 @@ test('every language has the same copy, row for row and point for point', () => 
   }
 });
 
+test('page titles and descriptions fit what search results show', () => {
+  for (const lang of LANGS) {
+    for (const [title, desc] of [[ui[lang].homeTitle, ui[lang].homeDescription], [copyFor(lang).painPage.title, copyFor(lang).painPage.description]]) {
+      assert.ok(title.length <= 70, `${lang} title is ${title.length} characters: ${title}`);
+      assert.ok(desc.length <= 200, `${lang} description is ${desc.length} characters`);
+    }
+  }
+});
+
+const SAME = new Set(['Ibuprofen']);
+
 test('no copy is left in English in another language', () => {
   const en = new Set(strings(PAGE_COPY.map((k) => copyFor('en')[k])));
   for (const lang of ['ru', 'cs']) {
-    for (const s of strings(PAGE_COPY.map((k) => copyFor(lang)[k]))) assert.ok(!en.has(s), `${lang} still English: ${s}`);
+    // A medicine's name is the same word in Czech.
+    for (const s of strings(PAGE_COPY.map((k) => copyFor(lang)[k]))) assert.ok(!en.has(s) || SAME.has(s), `${lang} still English: ${s}`);
   }
 });
 
@@ -44,7 +56,7 @@ test('Russian and Czech copy avoid the words the app itself may not use', () => 
   for (const lang of ['ru', 'cs']) {
     const c = copyFor(lang);
     // The disclaimer is the app's own sentence and mentions treatment on purpose, as the English one does.
-    for (const s of strings(['hero', 'rows', 'privacy', 'cta', 'shots', 'footer'].map((k) => c[k]))) {
+    for (const s of strings(['hero', 'live', 'rise', 'hours', 'privacy', 'cta', 'shots', 'footer', 'faq', 'painPage'].map((k) => c[k]))) {
       assert.doesNotMatch(s, FORBIDDEN[lang], `${lang}: ${s}`);
     }
   }

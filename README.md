@@ -18,15 +18,21 @@ npm run a11y       # accessibility scan of the built pages
 ## Layout
 
 - `src/pages/` pages; `src/pages/privacy.md` is the privacy policy, served at `/privacy/`
-- `src/components/Home.astro` the home page, rendered in each language by `src/pages/index.astro`,
+- `src/components/Home.astro` the home page, day to night, rendered in each language by `src/pages/index.astro`,
   `src/pages/ru/index.astro` and `src/pages/cs/index.astro`
+- `src/components/PainOverTime.astro` the page about logging every change in pain during one headache, served at
+  `/pain-over-time/` in each language; its copy is `painPage` in `src/data/copy*.mjs`
+- `src/components/Faq.astro` questions and answers (`faq` in the copy), shown open and given to search engines as
+  FAQPage markup word for word
 - `src/pages/_beta.astro` the parked Beta page (see below)
 - `src/components/`, `src/layouts/`, `src/styles/` the UI
 - `src/data/copy.mjs` page text; `src/config.ts` site settings, incl. the App Store link `STORE_URL`
 - `src/assets/screens/` optimised screenshots, `src/assets/screens/<lang>/` the app in that language
   (a screen missing there falls back to the English one, `src/lib/screens.ts`); `public/` static files (incl. `CNAME`)
-- `public/models/` the hero's 3D iPhone and iPad, built from the Sketchfab downloads by
-  `node scripts/make-models.mjs <iphone_17_pro.glb> <ipad_pro13in_black_m4.glb>`; drawn by `src/scripts/devices3d.ts`
+- `src/components/LiveLine.astro` + `src/scripts/liveline.ts` the home page's live diary line over the drifting
+  hills; every frame is drawn by `src/lib/liveline.mjs` (pure, tested in `scripts/liveline.test.mjs`): the line's
+  height is the pain, each event sits on it, and reduced motion gets one still frame. `Night.astro` is the page's
+  night end (privacy, call to action, night hills); `DayHills.astro` the drifting hills, also under the document pages
 - `scripts/` build checks, tests and the accessibility scan
 
 ## Languages
