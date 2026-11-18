@@ -9,13 +9,14 @@ import { langFromPath, basePath, localePath, ui } from '../i18n.mjs';
 const fm = Astro.props.frontmatter ?? {};
 const title: string = fm.title ?? Astro.props.title ?? SITE_NAME;
 const description: string = fm.description ?? Astro.props.description ?? '';
+const faq: { q: string; a: string }[] = Astro.props.faq ?? [];
 const lang = langFromPath(Astro.url.pathname);
 const base = basePath(Astro.url.pathname);
 ---
 <!doctype html>
 <html lang={lang}>
   <head>
-    <Seo title={title} description={description} />
+    <Seo title={title} description={description} faq={faq} />
     <slot name="head" />
   </head>
   <body>

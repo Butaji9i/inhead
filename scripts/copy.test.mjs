@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { hero, rows, privacy, cta, footer, disclaimer, beta, homeBeta, shots } from '../src/data/copy.mjs';
+import { hero, rows, privacy, cta, footer, disclaimer, beta, homeBeta, shots, faq, painPage } from '../src/data/copy.mjs';
 
 const FORBIDDEN = /\b(diagnos\w*|detect\w*|identif\w*|predict\w*|treat\w*|prevent\w*|reduc\w*|cure\w*)\b/i;
 
@@ -12,7 +12,7 @@ function strings(value, out = []) {
 }
 
 test('landing copy avoids the words the app itself may not use', () => {
-  const all = strings({ hero, rows, privacy, cta, footer, beta, homeBeta, shots });
+  const all = strings({ hero, rows, privacy, cta, footer, beta, homeBeta, shots, faq, painPage });
   for (const s of all) assert.doesNotMatch(s, FORBIDDEN, `forbidden word in: ${s}`);
 });
 
@@ -35,7 +35,7 @@ const WORDS = /\b(stars?|rated|reviews?|testimonial|free trial|pro|premium|subsc
 const bad = (s) => MONEY.test(s) || WORDS.test(s);
 
 test('no rating, review or price wording', () => {
-  const all = strings({ hero, rows, privacy, cta, footer, disclaimer, beta, homeBeta }).join(' ');
+  const all = strings({ hero, rows, privacy, cta, footer, disclaimer, beta, homeBeta, faq, painPage }).join(' ');
   assert.equal(bad(all), false);
 });
 
@@ -54,4 +54,18 @@ test('beta copy: three rows in order, three join steps, one call to action', () 
 
 test('beta copy states no minimum iOS version', () => {
   assert.doesNotMatch(strings({ beta, homeBeta }).join(' '), /\biOS\s?\d/);
+});
+
+test('the FAQ: every question has an answer, and the first is the one people search for', () => {
+  assert.ok(faq.items.length >= 3);
+  for (const { q, a } of [...faq.items, ...painPage.faq]) assert.ok(q.endsWith('?') && a.length > 20, q);
+  assert.match(faq.items[0].q, /more than one pain level/);
+});
+
+test('the pain-over-time page names the feature in its title, description and steps', () => {
+  assert.match(painPage.title, /every change/i);
+  assert.match(painPage.description, /pain curve/);
+  assert.ok(painPage.description.length <= 170, `description is ${painPage.description.length} characters`);
+  assert.equal(painPage.how.steps.length, 3);
+  assert.match(painPage.how.steps[1].text, /Log Change/);
 });

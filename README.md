@@ -20,6 +20,10 @@ npm run a11y       # accessibility scan of the built pages
 - `src/pages/` pages; `src/pages/privacy.md` is the privacy policy, served at `/privacy/`
 - `src/components/Home.astro` the home page, rendered in each language by `src/pages/index.astro`,
   `src/pages/ru/index.astro` and `src/pages/cs/index.astro`
+- `src/components/PainOverTime.astro` the page about logging every change in pain during one headache, served at
+  `/pain-over-time/` in each language; its copy is `painPage` in `src/data/copy*.mjs`
+- `src/components/Faq.astro` questions and answers (`faq` in the copy), shown open and given to search engines as
+  FAQPage markup word for word
 - `src/pages/_beta.astro` the parked Beta page (see below)
 - `src/components/`, `src/layouts/`, `src/styles/` the UI
 - `src/data/copy.mjs` page text; `src/config.ts` site settings, incl. the App Store link `STORE_URL`

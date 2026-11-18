@@ -13,7 +13,7 @@ const t = ui[lang];
     <div class="fcols">
       <div><h2>{SITE_NAME}</h2><p>{footer.blurb}</p></div>
       <div><h2>{t.support}</h2><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></div>
-      <div><h2>{t.site}</h2><a href={localePath(lang, '/')}>{t.home}</a><a href={localePath(lang, '/privacy/')}>{t.privacyPolicy}</a></div>
+      <div><h2>{t.site}</h2><a href={localePath(lang, '/')}>{t.home}</a><a href={localePath(lang, '/pain-over-time/')}>{t.painOverTime}</a><a href={localePath(lang, '/privacy/')}>{t.privacyPolicy}</a></div>
       <div><h2>{t.language}</h2>{LANGS.map((l) => (
         <a href={localePath(l, base)} lang={l} hreflang={l} aria-current={l === lang ? 'true' : undefined}>{LANG_META[l].name}</a>
       ))}</div>

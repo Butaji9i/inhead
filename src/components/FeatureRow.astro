@@ -1,6 +1,7 @@
 ---
-interface Props { eyebrow: string; title: string; lead: string; points: string[]; flip?: boolean }
-const { eyebrow, title, lead, points, flip = false } = Astro.props;
+// `more`: an optional link under the points, to the page that tells more about this row.
+interface Props { eyebrow: string; title: string; lead: string; points: string[]; flip?: boolean; more?: { href: string; text: string } }
+const { eyebrow, title, lead, points, flip = false, more } = Astro.props;
 ---
 <div class:list={['row', { flip }]}>
   <div class="row-text">
@@ -10,6 +11,7 @@ const { eyebrow, title, lead, points, flip = false } = Astro.props;
     <ul class="row-points">
       {points.map((p) => <li>{p}</li>)}
     </ul>
+    {more && <p class="row-more"><a href={more.href}>{more.text} →</a></p>}
   </div>
   <div class="shot"><slot /></div>
 </div>

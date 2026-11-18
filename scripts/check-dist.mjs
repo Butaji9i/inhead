@@ -36,7 +36,7 @@ export const LANG_PREFIXES = ['', 'ru/', 'cs/'];
 export function checkRequired(paths, cname) {
   const out = [];
   for (const p of LANG_PREFIXES) {
-    for (const page of [`${p}index.html`, `${p}privacy/index.html`]) if (!paths.includes(page)) out.push(`missing ${page}`);
+    for (const page of [`${p}index.html`, `${p}privacy/index.html`, `${p}pain-over-time/index.html`]) if (!paths.includes(page)) out.push(`missing ${page}`);
   }
   if (cname === null) out.push('missing CNAME');
   else if (cname.trim() !== 'inhead.app') out.push('CNAME must contain exactly inhead.app');

@@ -1,0 +1,63 @@
+---
+// The page about logging pain as it changes during one headache, in any of the site's languages;
+// src/pages/pain-over-time.astro, ru/pain-over-time.astro and cs/pain-over-time.astro render it.
+import Base from '../layouts/Base.astro';
+import StoreLabel from './StoreLabel.astro';
+import Shot from './Shot.astro';
+import Faq from './Faq.astro';
+import { copyFor } from '../i18n.mjs';
+import { screen } from '../lib/screens';
+import '../styles/landing.css';
+
+interface Props { lang: string }
+const { lang } = Astro.props;
+const { painPage: p, shots } = copyFor(lang);
+const episode = screen(lang, 'ipad-hero');
+const all = screen(lang, 'iphone-all');
+const week = screen(lang, 'iphone-week');
+---
+<Base title={p.title} description={p.description} faq={p.faq}>
+  <section class="page-hero" aria-labelledby="page-title">
+    <div class="wrap page-hero-grid">
+      <div>
+        <p class="eyebrow">{p.eyebrow}</p>
+        <h1 id="page-title">{p.headline} <span class="accent">{p.accent}</span></h1>
+        <p class="lede">{p.lede}</p>
+        <StoreLabel lang={lang} />
+      </div>
+      {/* The iPad's episode screen down to "Log Change": the pain curve, its peak and the three changes. */}
+      <div class="shot"><div class="crop crop-episode"><Shot light={episode.light} dark={episode.dark} width={1040} loading="eager" alt={shots.ipad} /></div></div>
+    </div>
+  </section>
+
+  <div class="wrap rows">
+    <div class="row">
+      <div class="row-text">
+        <h2>{p.how.title}</h2>
+        <ol class="steps">
+          {p.how.steps.map((s) => <li><h3>{s.title}</h3><p>{s.text}</p></li>)}
+        </ol>
+      </div>
+      <div class="shot"><div class="crop crop-record"><Shot light={all.light} dark={all.dark} width={660} alt={shots.record} /></div></div>
+    </div>
+    <div class="row flip">
+      <div class="row-text">
+        <h2>{p.see.title}</h2>
+        <ul class="row-points">{p.see.points.map((pt) => <li>{pt}</li>)}</ul>
+      </div>
+      <div class:list={['shot']}><div class:list={['crop', 'crop-see', { 'crop-see-tall': week.own }]}><Shot light={week.light} dark={week.dark} width={660} alt={shots.see} /></div></div>
+    </div>
+  </div>
+
+  <Faq title={p.faqTitle} items={p.faq} />
+
+  <section class="cta" aria-labelledby="cta-title">
+    <div class="wrap">
+      <div class="panel">
+        <h2 id="cta-title">{p.cta.title}</h2>
+        <p>{p.cta.text}</p>
+        <StoreLabel lang={lang} />
+      </div>
+    </div>
+  </section>
+</Base>

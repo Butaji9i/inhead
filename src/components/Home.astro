@@ -6,13 +6,14 @@ import StoreLabel from './StoreLabel.astro';
 import FeatureRow from './FeatureRow.astro';
 import PrivacyBand from './PrivacyBand.astro';
 import Shot from './Shot.astro';
-import { copyFor, ui } from '../i18n.mjs';
+import Faq from './Faq.astro';
+import { copyFor, ui, localePath } from '../i18n.mjs';
 import { screen } from '../lib/screens';
 import '../styles/landing.css';
 
 interface Props { lang: string }
 const { lang } = Astro.props;
-const { hero, rows, cta, shots } = copyFor(lang);
+const { hero, rows, cta, shots, faq, painPage } = copyFor(lang);
 const t = ui[lang];
 const [record, see, share] = rows;
 const all = screen(lang, 'iphone-all');
@@ -23,7 +24,7 @@ const doctor = screen(lang, 'iphone-data-doctor');
 // (scrolled further, to put the card at 150 pt) at about 450 px.
 const shareShift = doctor.own ? 26 : 72.7;
 ---
-<Base title={t.homeTitle} description={t.homeDescription}>
+<Base title={t.homeTitle} description={t.homeDescription} faq={faq.items}>
   <script is:inline slot="head">
     // In <head>, so it's set before the hero is first styled: on wide screens that can show the 3D devices,
     // the hero's screenshots start hidden and the models fade in instead (see DeviceGroup.astro).
@@ -42,7 +43,7 @@ const shareShift = doctor.own ? 26 : 72.7;
     </div>
   </section>
   <div class="wrap rows">
-    <FeatureRow {...record}>
+    <FeatureRow {...record} more={{ href: localePath(lang, '/pain-over-time/'), text: painPage.homeLink }}>
       <div class="crop crop-record"><Shot light={all.light} dark={all.dark} width={660} alt={shots.record} /></div>
     </FeatureRow>
     <FeatureRow {...see} flip>
@@ -56,6 +57,8 @@ const shareShift = doctor.own ? 26 : 72.7;
   </div>
 
   <PrivacyBand lang={lang} />
+
+  <Faq eyebrow={faq.eyebrow} title={faq.title} items={faq.items} />
 
   <section class="cta" aria-labelledby="cta-title">
     <div class="wrap">

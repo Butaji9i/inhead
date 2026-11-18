@@ -15,7 +15,7 @@ function strings(value, out = []) {
 const shape = (v) => (typeof v === 'string' ? '' : Array.isArray(v) ? v.map(shape) : v && typeof v === 'object'
   ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, k === 'key' ? x : shape(x)])) : v);
 
-const PAGE_COPY = ['hero', 'rows', 'privacy', 'cta', 'shots', 'footer', 'disclaimer'];
+const PAGE_COPY = ['hero', 'rows', 'privacy', 'cta', 'shots', 'footer', 'disclaimer', 'faq', 'painPage'];
 
 test('every language has the same copy, row for row and point for point', () => {
   const en = copyFor('en');
@@ -23,6 +23,15 @@ test('every language has the same copy, row for row and point for point', () => 
     const c = copyFor(lang);
     for (const k of PAGE_COPY) assert.deepEqual(shape(c[k]), shape(en[k]), `${lang}.${k}`);
     assert.deepEqual(Object.keys(ui[lang]).sort(), Object.keys(ui.en).sort(), `ui.${lang}`);
+  }
+});
+
+test('page titles and descriptions fit what search results show', () => {
+  for (const lang of LANGS) {
+    for (const [title, desc] of [[ui[lang].homeTitle, ui[lang].homeDescription], [copyFor(lang).painPage.title, copyFor(lang).painPage.description]]) {
+      assert.ok(title.length <= 70, `${lang} title is ${title.length} characters: ${title}`);
+      assert.ok(desc.length <= 200, `${lang} description is ${desc.length} characters`);
+    }
   }
 });
 
@@ -44,7 +53,7 @@ test('Russian and Czech copy avoid the words the app itself may not use', () => 
   for (const lang of ['ru', 'cs']) {
     const c = copyFor(lang);
     // The disclaimer is the app's own sentence and mentions treatment on purpose, as the English one does.
-    for (const s of strings(['hero', 'rows', 'privacy', 'cta', 'shots', 'footer'].map((k) => c[k]))) {
+    for (const s of strings(['hero', 'rows', 'privacy', 'cta', 'shots', 'footer', 'faq', 'painPage'].map((k) => c[k]))) {
       assert.doesNotMatch(s, FORBIDDEN[lang], `${lang}: ${s}`);
     }
   }

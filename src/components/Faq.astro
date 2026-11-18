@@ -1,0 +1,20 @@
+---
+// Questions and answers, all shown open: the words people search with, answered where both readers and search
+// engines see them. The same items go into the page's FAQPage markup (the `faq` prop on Base).
+interface Props { eyebrow?: string; title: string; items: { q: string; a: string }[]; id?: string }
+const { eyebrow, title, items, id = 'faq-title' } = Astro.props;
+---
+<section class="faq" aria-labelledby={id}>
+  <div class="wrap">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h2 id={id}>{title}</h2>
+    <dl class="faq-list">
+      {items.map(({ q, a }) => (
+        <div class="faq-item">
+          <dt>{q}</dt>
+          <dd>{a}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>

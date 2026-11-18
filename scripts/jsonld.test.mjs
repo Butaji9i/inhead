@@ -47,3 +47,29 @@ test('never emits aggregateRating or review', () => {
     assert.equal(deepHas(buildJsonLd({ ...base, pageTitle: 'P', ...args }), ['aggregateRating', 'review']), false);
   }
 });
+
+test('FAQPage carries the questions and answers word for word, on the page that shows them', () => {
+  const faq = [{ q: 'Can I log more than one pain level?', a: 'Yes.' }];
+  const home = buildJsonLd({ ...base, path: '/', storeUrl: null, faq });
+  const node = home['@graph'].find((n) => n['@type'] === 'FAQPage');
+  assert.equal(node['@id'], 'https://inhead.app/#faq');
+  assert.deepEqual(node.mainEntity, [{ '@type': 'Question', name: faq[0].q, acceptedAnswer: { '@type': 'Answer', text: 'Yes.' } }]);
+  const page = buildJsonLd({ ...base, path: '/pain-over-time/', pageTitle: 'P', crumbName: 'Pain over time', storeUrl: null, faq, lang: 'cs', homeUrl: 'https://inhead.app/cs/' });
+  assert.deepEqual(types(page), ['WebPage', 'BreadcrumbList', 'FAQPage']);
+  assert.equal(page['@graph'][2].url, 'https://inhead.app/cs/pain-over-time/');
+  assert.equal(page['@graph'][1].itemListElement[1].name, 'Pain over time');
+});
+
+test('no FAQPage without questions', () => {
+  assert.ok(!types(buildJsonLd({ ...base, path: '/privacy/', pageTitle: 'P', storeUrl: null })).includes('FAQPage'));
+});
+
+test('the app lists its features, and the organization points at its App Store page', () => {
+  const store = 'https://apps.apple.com/us/app/inhead/id1';
+  const doc = buildJsonLd({ ...base, path: '/', storeUrl: store, features: ['A pain curve per episode'] });
+  const app = doc['@graph'].find((n) => n['@type'] === 'MobileApplication');
+  assert.deepEqual(app.featureList, ['A pain curve per episode']);
+  assert.deepEqual(doc['@graph'][0].sameAs, [store]);
+  const page = buildJsonLd({ ...base, path: '/pain-over-time/', pageTitle: 'P', storeUrl: store });
+  assert.equal(page['@graph'][0].about['@id'], 'https://inhead.app/#app');
+});
