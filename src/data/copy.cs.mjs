@@ -46,7 +46,7 @@ export const privacy = {
   lead: 'Inhead nemá žádný vlastní server ani účty — nemáme u vás co číst.',
   tiles: [
     { key: 'account', title: 'Bez účtu', text: 'Žádná registrace, e-mail ani heslo.' },
-    { key: 'device', title: 'Ve vašem zařízení', text: 'A ve vašem soukromém iCloudu, jen pokud zapnete synchronizaci.' },
+    { key: 'device', title: 'Ve vašem zařízení', text: 'A ve vašem soukromém iCloudu, jen pokud zapnete synchronizaci. Data z Apple Health zůstávají jen tady.' },
     { key: 'tracking', title: 'Nic se nesleduje', text: 'Žádná analytika, žádná reklama, žádné sledování napříč jinými aplikacemi a weby.' },
   ],
 };
