@@ -1,12 +1,12 @@
 ---
 layout: ../../layouts/Doc.astro
 title: Zásady ochrany soukromí — Inhead
-description: Jak Inhead zachází s vašimi daty. Deník bolestí hlavy uchovává ve vašem zařízení a ve vašem iCloudu jen tehdy, když to zapnete.
+description: Jak Inhead zachází s vašimi daty. Deník bolestí hlavy uchovává ve vašem zařízení a ve vašem iCloudu jen tehdy, když to zapnete. Cokoli, co přečte z Apple Health, zůstává v zařízení.
 headline: Zásady ochrany soukromí.
 accent: Váš deník patří vám.
 ---
 
-**Poslední aktualizace: 5. listopadu 2026**
+**Poslední aktualizace: 21. listopadu 2026**
 
 *Toto je překlad [anglické verze](/privacy/). Pokud se liší, platí anglická verze.*
 
@@ -27,6 +27,15 @@ vaše zařízení, takže to nemůže číst Apple ani **my.** Inhead nemá žá
 záznamům. Synchronizaci můžete kdykoli zastavit vypnutím **Synchronizovat
 s iCloudem** v Nastavení Inheadu nebo vypnutím iCloudu pro Inhead v aplikaci
 Nastavení systému iOS; deník pak zůstane v zařízení.
+
+Inhead čte typy dat z Apple Health, které zapnete — menstruační krvácení, léky,
+které vyberete, a jejich dávky, spánek a minuty cvičení —, uchovává jejich kopii
+jen v tomto zařízení, nikdy v iCloudu ani v zálohách zařízení, a když daný typ
+vypnete, kopii smaže. Data z Apple Health jen čte, nic do nich nezapisuje.
+Deník, který se synchronizuje, i grafy, které uložíte, obsahují jen to, co jste
+v Inheadu sami zadali nebo vybrali — uložený graf synchronizuje svůj výběr řad,
+nikdy hodnotu z Apple Health. Zpráva, kterou se rozhodnete exportovat, může
+obsahovat údaje, které započítaly dávky z Apple Health.
 
 Inhead neobsahuje žádnou analytiku, žádné hlášení pádů ani reklamu a nesleduje
 vás napříč jinými aplikacemi a weby. Dvě open-source komponenty, na kterých

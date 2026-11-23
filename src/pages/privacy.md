@@ -1,12 +1,12 @@
 ---
 layout: ../layouts/Doc.astro
 title: Privacy Policy — Inhead
-description: How Inhead handles your data. It keeps your headache diary on your own device, and in your own iCloud only if you turn that on.
+description: How Inhead handles your data. It keeps your headache diary on your own device, and in your own iCloud only if you turn that on. Anything it reads from Apple Health stays on the device.
 headline: Privacy policy.
 accent: Your diary is yours.
 ---
 
-**Last updated: 5 November 2026**
+**Last updated: 21 November 2026**
 
 Inhead keeps your headache diary on your own device, and in your own iCloud
 only if you turn that on. It has no server of its own and no account with us.
@@ -22,6 +22,15 @@ hold, so neither Apple nor **we can read it.** There is no Inhead server, no Inh
 us or anyone else to reach your records. You can stop the syncing at any time by
 turning **Sync with iCloud** off in Inhead's Settings, or iCloud off for Inhead in
 the iOS Settings app, and the diary stays on the device.
+
+Inhead reads the Apple Health types you turn on — menstrual flow, medications
+you choose and their doses, sleep, exercise minutes — keeps a copy on this
+device only, never in iCloud and never in device backups, and deletes it when
+you turn that type off. It only reads: Inhead writes nothing to Apple Health.
+The diary that syncs, and the charts you save, hold only what you typed or
+chose in Inhead — a saved chart's choice of series syncs, never a Health
+value. A report you choose to export can include figures that counted Apple
+Health doses.
 
 Inhead contains no analytics, no crash reporting and no advertising, and it does
 not track you across other apps or websites. The two open-source components it
